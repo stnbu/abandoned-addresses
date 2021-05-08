@@ -1,6 +1,6 @@
 // The idea has the advantage of being super simple! Create a contract that cointains blacklisted addresses.
 
-// UNTESTED UNCOMPILED pseodocode ...
+// UNTESTED UNCOMPILED pseudocode ...
 
 pragma solidity ^0.8.0;
 
