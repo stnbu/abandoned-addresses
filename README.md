@@ -4,7 +4,7 @@
 
 Blacklisting is an incredibly simple idea. It's just the idea of an "array", which is an idea going back a while, overloaded with a concept. "All of these are on the blacklist."
 
-Likewise blacklisting on Ethereum should be that simple. And naturally there won't one authoritative blacklist, nor should there. There's just a market of blacklists. The popular ones rise to the top. The same thing applies to widespread "ad filtering" software on browsers. They come with a compiled-in default only because that is the one that won the most confidence long ago. You're free to choose whatever you like. This doesn't try to be anything more complicated than a list of addresses, with a UI.
+Likewise blacklisting on Ethereum should be that simple. And naturally there won't be one authoritative blacklist, nor should there. There's just a market of blacklists. The popular ones rise to the top. The same thing applies to widespread "ad filtering" software on browsers. They come with a compiled-in default only because that is the one that won the most confidence long ago. You're free to choose whatever you like. This doesn't try to be anything more complicated than a list of addresses, with a UI.
 
 * Only the key owner can blacklist. This is not about reporting bad behavior, this is about declaring that you do not claim ownership of that key anymore. Maybe you lost the wallet? Maybe you shared the seed phrase with someone and you no longer trust that someone. You can assert, this is not my key anymore. It's not _me_, I don't know who it is now (in the future).
 * What applications do with this is totally up for grabs, but the obvious thing would be, say, contract refuses to accept any address blacklisted by contract R.
