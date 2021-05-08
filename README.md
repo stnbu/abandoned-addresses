@@ -9,7 +9,8 @@ Likewise blacklisting on Ethereum should be that simple. And naturally there won
 * Only the key owner can blacklist. This is not about reporting bad behavior, this is about declaring that you do not claim ownership of that key anymore. Maybe you lost the wallet? Maybe you shared the seed phrase with someone and you no longer trust that someone. You can assert, this is not my key anymore. It's not _me_, I don't know who it is now (in the future).
 * What applications do with this is totally up for grabs, but the obvious thing would be, say, contract refuses to accept any address blacklisted by contract R.
 * There is no going back, you cannot un-blacklist yourself.
-* There is no central anything. This is just a proposition. 
+* There is no central anything. This is just a proposition.
+* If we do have a dashboard it should go through the blockchain and find all blackilst contracts (by "interface") and make queries about them. Who has the most addresses? Who has the most recent update? Who is recieving the greatest rate-of-update? Which contracts are listed as "blacklisted" by other contracts?
 
 # The Web UI
 
