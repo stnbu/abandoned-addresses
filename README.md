@@ -24,7 +24,7 @@ For the PoC...
 # The Contract
 
 * As simple as possible.
-* Has `blacklistAddress(<address>)` and `isBlacklisted(<address>)` the former will immediately revert if `msg.sender != address`, the later just consults a `mapping(address => bool)` and returns the corresponding "is blacklisted?" value (True/False).
+* Has `blacklistAddress(<address>)` and `isBlacklisted(<address>)` the former will immediately revert if `msg.sender != address`, the latter just consults a `mapping(address => bool)` and returns the corresponding "is blacklisted?" value (True/False).
 * There is no cost of any kind except for gas.
 * Like an ERC, I imagine there would just be a method spec, but I think it would ruin things if it were much more complicated. I-deas, yall? One could blacklist a blacklist by adding it to another blacklist, so that's already built in.
 * We _could_ allow a forward-to address to be included instead of the bool. That's a pretty big can of worms, but that's worth thinking on. What this can be is a network of address you can 'walk', even just within this contract, there are circuits tracing a path from one key to another, `[k0:k1, k2:k2]` is another way of saying `k0 -> k1 -> k2`. And since the addition of the `k1` record was signed by `k0`, by induction you know you have a linked list of keys and therefore "cryptographic provenance" 🎩 👑 
