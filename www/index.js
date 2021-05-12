@@ -58,17 +58,6 @@ $("#enableEthereumButton").click(function() {
   getAccount();
 });
 
-//
-// TBD
-//
-// Blacklist.methods.isBlacklisted(function(error, result) {
-//   if (!error) {
-//     console.log(result);
-//   } else
-//     console.log(error);
-// });
-
-
 $("#getIsBlacklisted").click(function() {
   let address = $("#isBlacklisted").val();
   transaction = Blacklist.methods.isBlacklisted(address);
