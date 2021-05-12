@@ -68,23 +68,40 @@ $("#enableEthereumButton").click(function() {
 //     console.log(error);
 // });
 
+
+$("#getIsBlacklisted").click(function() {
+  let address = $("#isBlacklisted").val();
+  transaction = Blacklist.methods.isBlacklisted(address);
+  transaction.call({from: account}, function (error, isBlacklisted) {
+    if (!error) {
+      if (isBlacklisted) {
+        alert(address + " IS blacklisted");
+      } else {
+        alert(address + " IS NOT blacklisted");
+      }
+    } else {
+      alert("error while checking blacklisted status: " + error);
+    }
+  });
+});
+
 $("#blacklistAddress").click(function() {
   let address = $("#blacklistedAddress").val();
   transaction = Blacklist.methods.blacklistAddress(address);
   transaction.send({from: account})
     .on('transactionHash', function(hash){
-      console.log("hash: " + hash);
+      console.log("transaction hash: " + hash);
     })
     .on('confirmation', function(confirmationNumber, receipt){
-      console.log("hash: " + hash);
+      console.log("blacklisting confirmed!: " + receipt + " (" + confirmationNumber + "x)");
     })
     .on('receipt', function(receipt){
       console.log("receipt: " + receipt);
     })
     .on('error', function(error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
-      console.log("error/receipt: " + error + "/" + receipt);
+      alert("error/receipt: " + error + "/" + receipt);
     })
     .finally(function() {
-      console.log("finally!");
+      console.log("blacklisting finally clause");
     });
 });
