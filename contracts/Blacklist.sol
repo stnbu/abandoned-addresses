@@ -1,22 +1,23 @@
-// The idea has the advantage of being super simple! Create a contract that cointains blacklisted addresses.
-
-// UNTESTED UNCOMPILED pseudocode ...
+// Compiles now. Barely tested.
 
 pragma solidity ^0.8.0;
 
 contract Blacklist {
 
-    private mapping(address => bool) blacklist;
+    // Private because we are implementing an interface here and this isn't part of it.
+    mapping(address => bool) private blacklist;
 
-    // We have no owner, nor anything to construct.
-    // We get by on our own reputation alone.
+    // ~~We have no owner, nor anything to construct.~~ We might WANT an owner an aall'at.
 
-    public function isBlacklisted(address _address) (bool) {
-	return blacklist[_address];
+    // External, for now. Do we want these to be "public"?
+    function isBlacklisted(address _address) external view returns (bool) {
+        return blacklist[_address];
     }
 
-    public function blacklistAddress(address _address) {
-	require(msg.sender == _address);
-	blacklist[msg.sender] = true;
+    function blacklistAddress(address _address) external returns (bool) {
+        // I believe there are better ways to check for this. Does it "cost more" to return an error message?
+        require(msg.sender == _address);
+        blacklist[msg.sender] = true;
+        return blacklist[msg.sender];
     }
 }
