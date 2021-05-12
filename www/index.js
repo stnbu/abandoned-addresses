@@ -53,6 +53,7 @@ async function getAccount() {
   });
 }
 
+// See issue #2
 $("#enableEthereumButton").click(function() {
   // do noop if account already set. or do we need to?
   getAccount();
