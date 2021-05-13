@@ -23,24 +23,26 @@ Stuff to be investigated/implemented...
 
 */
 
-var Blacklist = null;
-var web3 = null;
-
+// FIXME, ALERT: I thought this always agreed with MM's "connected" indicator. I've seen once where MM was "connected" but this was null !
 console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
+// if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [enable ethereum] button here -- $("#enableEthereumButton")
 
 if (typeof window.ethereum === 'undefined') {
   alert('Wallet provider is NOT Available!!');  // How do we respond?
 }
 
+var web3 = new Web3(window.ethereum);  // FYI, Web3.givenProvider appears to be an alias for window.ethereum
+
 // passes address="0xfffff...." (string, address)
 window.ethereum.on('connect', function(address) {
+  // this fires when you eth_requestAccounts ... NOT when the pages gets loaded and you're already connected
   console.log("connected with " + address);
-}); // works when you eth_requestAccounts ... NOT when the pages gets loaded and you're already connected ... returns addr
+});
 
 // passes ..nothing? empty string?
 window.ethereum.on('disconnect', function(x) {
   console.log("AN address disconnected. If there's an `x` it's: " + x);
-}); // works, returns nothing
+});
 
 // passes account="0xffff...." (string, address)
 window.ethereum.on('accountsChanged', function(account) { // my guess, this fires when window.ethereum.selectedAddress changes.
@@ -50,6 +52,9 @@ window.ethereum.on('accountsChanged', function(account) { // my guess, this fire
   // So for example, this is where we would enable, disable the "connect to ethereum" button and update any badges or displayed addresses.
   // Empty string means we are not connected at all. Any other value is the address of the global wallet that this dapp thinks its using (!!!)
   // Sublty: it looks like the "account" returned when not connected is an empty string, but window.ethereum.selectedAddress gets set to `null`
+  //
+  // If and only if `account === ""` should we enable $("#enableEthereumButton")
+  // If account has a non-empty value $("#enableEthereumButton") should be enabled here
   console.log("[WE WILL REACT TO] accounts changed TO `" + account + "`");
 });
 
@@ -61,20 +66,21 @@ window.ethereum.on('chainChanged', function(toChain) {
   //  blacklistContractAddresses = {"0x5": "0xffffff..."}  // mapping of chain ID and contract address.
   //
   // Change the contract value, re-init Blacklist and put up a conspicous banner if we are on a testnet (maybe nothing if mainnet)
+  //
+  // Also, using the same info (contract address) we could have a link to the correct etherscan page for the contract.
   console.log("chain changed TO " + toChain);
 });
 
 // passes ...some message
 window.ethereum.on('message', function(mail) {
   // Anything that shows up here should be explicitly handled
+  // I'm tempted to say that anything that shows up in the blacklistAddress handlers will show up here too, but maybe not.
+  // It would be nice to know if we have to use those handlers or if the messages here have the same info...
   console.log("You've Got Mail! " + mail);
 });
 
-// I think all of this stuff only wants to get initialized after clicking enable OR detecting an already-present "connection" (metamask says "connected")
-
-function initWeb3() {
-  console.log("running initWeb3");
-  // and here. what's the smart way to streamline all this stuff?
+function getBlacklistContract() {
+  // what's the smart way to streamline all this stuff?
   var abi = [
     {
       "inputs": [
@@ -116,23 +122,19 @@ function initWeb3() {
     }
   ];
 
-  web3 = new Web3(window.ethereum);  // Web3.givenProvider appears to be an alias for window.ethereum ... is it? if so seems like this just confuses things.
-  web3.eth.defaultAccount = window.ethereum.selectedAddress; // it appears this is not set if we haven't clicked enable metamask
-  let contractAddress = "0x5e2B9ba689fBB01ADB928044a31e331a8a1C31D4"; // obviously we need a better-than-this
-  Blacklist = new web3.eth.Contract(abi, contractAddress);
+  let contractAddress = "0x5e2B9ba689fBB01ADB928044a31e331a8a1C31D4";
+  return new web3.eth.Contract(abi, contractAddress);
 }
-initWeb3();
-
+// If we're going to be using globals, they should appear at the top of the file.
+var Blacklist = getBlacklistContract();
 
 async function getAccount() {
   window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-    console.log("we succesfully connected to *A* wallet. The zeroith element of: " + accounts);
+    console.log("we succesfully connected to *A* wallet. accounts==" + accounts);
   });
 }
 
-// See issue #2
 $("#enableEthereumButton").click(function() {
-  // do noop if account already set. or do we need to?
   getAccount();
 });
 
@@ -160,7 +162,8 @@ $("#blacklistAddress").click(function() {
       console.log("transaction hash: " + hash);
     })
     .on('confirmation', function(confirmationNumber, receipt){
-      console.log("blacklisting confirmed!: " + receipt + " (" + confirmationNumber + "x)");
+      // We have the confirmation number here. If someone blacklists an address, we could have a widget that shows a confirmation count.
+      console.log("blacklisting confirmed!: " + receipt + " (" + confirmationNumber + ")");
     })
     .on('receipt', function(receipt){
       console.log("receipt: " + receipt);
