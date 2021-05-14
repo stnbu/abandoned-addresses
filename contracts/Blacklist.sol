@@ -20,7 +20,7 @@ contract Blacklist {
         // I believe there are better ways to check for this. Does it "cost more" to return an error message?
         require(msg.sender == _address);
         blacklist[msg.sender] = true;
-	emeit Blacklisted(msg.sender);
+        emit Blacklisted(msg.sender);
         return blacklist[msg.sender];
     }
 }

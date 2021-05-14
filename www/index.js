@@ -16,7 +16,7 @@
   [Ugly notes moved to the bottom]
 */
 
-var CONTRACT_ADDRESS = "0x5e2B9ba689fBB01ADB928044a31e331a8a1C31D4";
+var CONTRACT_ADDRESS = "0x44b2A4Ae5ce1A1004F32620a48f18D3bDa8Cbd4a";
 
 console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
 // if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
@@ -145,6 +145,19 @@ function getBlacklistContract() {
       ],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+	{
+	  "indexed": true,
+	  "internalType": "address",
+	  "name": "_address",
+	  "type": "address"
+	}
+      ],
+      "name": "Blacklisted",
+      "type": "event"
     },
     {
       "inputs": [
