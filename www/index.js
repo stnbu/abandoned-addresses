@@ -16,6 +16,22 @@
   [Ugly notes moved to the bottom]
 */
 
+/*
+Regarding EVM events (and not javascript events)...
+
+see: https://web3js.readthedocs.io/en/v1.3.4/web3-eth-contract.html?highlight=event#contract-events
+
+I believe we hook into the "Blacklisted" event with:
+
+  BLACKLIST.events.Blacklisted([options][, callback])
+
+* Does the above fire a javascript event for every event in the history of the contract?
+* If not, would it be practical to try and do that? How can it be done?
+* Does the above fire a javacript event for each event the contract fires "from now on"?
+* IOW, when does callback get called and how many times?
+* Do you see the event for other users of the contract ..... ? .... or just "yours"?
+ */
+
 var CONTRACT_ADDRESS = "0x44b2A4Ae5ce1A1004F32620a48f18D3bDa8Cbd4a";
 
 console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
