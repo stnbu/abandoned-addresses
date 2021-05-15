@@ -34,16 +34,22 @@ I believe we hook into the "Blacklisted" event with:
 
 var CONTRACT_ADDRESS = "0x44b2A4Ae5ce1A1004F32620a48f18D3bDa8Cbd4a";
 
-console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
-// if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
-// button here -- $("#enableEthereumButton")
-// FIXME: I thought this always agreed with MM's "connected" indicator. I've seen once where MM was "connected" but this
-// was null !
-// UPDATE: if metamask extension disabled, the above throws an "undefined" error, as expected.
-
 if (typeof window.ethereum === 'undefined') {
   alert('Wallet provider is NOT Available!!');  // How do we respond?
 }
+
+// Notice the return value of isConnected() is not assigned. This may be useful for other things, but
+// I noticed that after calling "isConnected", "window.ethereum.selectedAddress" gets set. In other words
+// It looks like "window.ethereum.selectedAddress" getting assined an address is a side-effect of isConnected()
+// Otherwise, window.ethereum.selectedAddress is null, even when metamask says "connected". If metamask is
+// NOT connected, then window.ethereum.selectedAddress does not get set :-/
+//window.ethereum.isConnected()
+// Damnit! No. This does not seem to have that effect. On loading, the value of window.ethereum.selectedAddress
+// is still a big mystery!
+
+// If window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
+// button here -- $("#enableEthereumButton")
+console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
 
 function logEvent(eventName, content, _error) {
   let message = "[event fired: '" + eventName + "'] " + "content=" + JSON.stringify(content);
@@ -54,6 +60,8 @@ function logEvent(eventName, content, _error) {
 }
 
 var web3 = new Web3(window.ethereum);  // FYI, Web3.givenProvider appears to be an alias for window.ethereum
+
+// Start window.etherem events...
 
 // passes passes connectionInfo which may or may not have a chainId memeber.
 window.ethereum.on('connect', function(connectInfo) {
@@ -140,6 +148,7 @@ window.ethereum.on('message', function(content) {
   // Anything that shows up here should be explicitly handled
 });
 
+// Uses the global CONTRACT_ADDRESS and returns an instance of the Blacklist contract (in web3-space)
 function getBlacklistContract() {
   // what's the smart way to streamline all this stuff?
   var abi = [
@@ -195,11 +204,17 @@ function getBlacklistContract() {
       "type": "function"
     }
   ];
-
   return new web3.eth.Contract(abi, CONTRACT_ADDRESS);
 }
 // If we're going to be using globals, they should appear at the top of the file.
 var BLACKLIST = getBlacklistContract();
+
+// We have only one EVM (contract) event to worry about: "Blacklisted"
+BLACKLIST.events.Blacklisted({fromBlock: "earliest"}, function(incoming) {
+  // Turns out `incoming` is `null` ...wtf?
+  // Also, this can either take a looong time, or possibly never comes sometimes. Strange!
+  logEvent('blacklisted_evm_event', incoming);
+});
 
 async function getAccount() {
   window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
