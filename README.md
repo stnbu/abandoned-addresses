@@ -35,7 +35,7 @@ For the PoC...
 
 # Testing and Deployment
 
-You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8485` (if configured per instructions). Geth is not hard. Inquire within.
+You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8545` (if configured per instructions). Geth is not hard. Inquire within.
 
 ## Testing
 
