@@ -1,4 +1,6 @@
-// Compiles now. Barely tested.
+// SPDX-License-Identifier: UNLICENSED
+//
+// This (short) contract hasn't been formally tested in any way, but seems to behave according to spec.
 
 pragma solidity ^0.8.0;
 
