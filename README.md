@@ -35,19 +35,32 @@ For the PoC...
 
 # About brownie
 
-We expect there to be a `.env` file in your project root with the following line:
+"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. We use `eth-brownie` as a simple infrastructure tool.
 
-> export PRIVATE_KEY="526fbabbd78b1dcc5-nom-nom-nom-a0aec16aa91448db33e9a0c9ff0129d749"
+Installing brownie will inevitably involve fiddling, but basically:
 
-In other words your 32 byte, 64 character hexidecimal private key (which of course you would not use if it were from mainnet! say it...!) corresponding to a real account with a positive balance on the `rinkeby` test network. Ask for help? File an issue?
-
+```bash
+python3 -m venv ~/venv3
+source ~/venv3/bin/activate
+pip3 install eth-brownie
 ```
-~/.brownie$ ls -l network-config.yaml
-lrwxrwxrwx 1 larry larry 36 May 15 15:12 network-config.yaml -> [SOME_PATH]/blacklist/network-config.yaml
+
+Best of luck, pal!
+
+Once installed, there should be only two prerequisites to deploying (currently just to Rinkeby).
+
+1. Link the `network-config.yaml` file to your `~/.brownie/` directory.
+1. create a `./.env` file with the contents `export export PRIVATE_KEY="..."`
+
+Havning done that, you _should_ be able to
+
+```bash
+brownie run ./scripts/deploy.py
 ```
 
-That is, link the `network-config.yaml` in this repo to `~/.brownie/network-config.yaml` on your system (until "we" understand how to keep that bit in the repo correctly.)
+And in ten seconds, give or take, you should have
 
-`geth` needs to be running and syncing with `rinkeby` and listening on the standard port on loopback.
+1. A successful deployment of `Blacklist.sol`
+1. a new file at `./www/deployments/default.js` with the ABI and contract address.
 
-I think that's it...? _You_ need to figure out how to install `eth-brownie`. That's all you, bro.
+You should now be good to go. File an issue if something doesn't work.
