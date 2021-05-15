@@ -123,7 +123,7 @@ window.ethereum.on('message', function(content) {
 });
 
 // If we're going to be using globals, they should appear at the top of the file.
-var BLACKLIST = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.json
+var BLACKLIST = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.js
 
 async function getAccount() {
   window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
