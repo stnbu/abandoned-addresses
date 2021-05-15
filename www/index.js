@@ -16,8 +16,6 @@
   [Ugly notes moved to the bottom]
 */
 
-var CONTRACT_ADDRESS = "0x5e2B9ba689fBB01ADB928044a31e331a8a1C31D4";
-
 console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
 // if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
 // button here -- $("#enableEthereumButton")
@@ -124,53 +122,8 @@ window.ethereum.on('message', function(content) {
   // Anything that shows up here should be explicitly handled
 });
 
-function getBlacklistContract() {
-  // what's the smart way to streamline all this stuff?
-  var abi = [
-    {
-      "inputs": [
-	{
-	  "internalType": "address",
-	  "name": "_address",
-	  "type": "address"
-	}
-      ],
-      "name": "blacklistAddress",
-      "outputs": [
-	{
-	  "internalType": "bool",
-	  "name": "",
-	  "type": "bool"
-	}
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-	{
-	  "internalType": "address",
-	  "name": "_address",
-	  "type": "address"
-	}
-      ],
-      "name": "isBlacklisted",
-      "outputs": [
-	{
-	  "internalType": "bool",
-	  "name": "",
-	  "type": "bool"
-	}
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ];
-
-  return new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-}
 // If we're going to be using globals, they should appear at the top of the file.
-var BLACKLIST = getBlacklistContract();
+var BLACKLIST = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.json
 
 async function getAccount() {
   window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
