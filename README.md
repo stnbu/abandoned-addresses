@@ -39,7 +39,7 @@ We expect there to be a `.env` file in your project root with the following line
 
 > export PRIVATE_KEY="526fbabbd78b1dcc5-nom-nom-nom-a0aec16aa91448db33e9a0c9ff0129d749"
 
-In other words your 32 byte, 64 character hexidecimal private key (which of course you would not use if it were from mainnet! say it...!)
+In other words your 32 byte, 64 character hexidecimal private key (which of course you would not use if it were from mainnet! say it...!) corresponding to a real account with a positive balance on the `rinkeby` test network. Ask for help? File an issue?
 
 ```
 ~/.brownie$ ls -l network-config.yaml
