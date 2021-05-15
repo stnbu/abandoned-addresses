@@ -1,0 +1,14 @@
+compiler:
+  solc:
+    remappings:
+
+autofetch_sources: False
+dotenv: .env
+
+networks:
+  default: rinkeby
+  rinkeby:
+    some_handy_var: '0x0'
+
+wallets:
+  from_key: ${PRIVATE_KEY}

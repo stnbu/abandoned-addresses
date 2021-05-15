@@ -1,0 +1,22 @@
+live:
+  - name: Ethereum
+    networks:
+      - name: Rinkeby (local client)
+        chainid: 4
+        id: rinkeby
+        host: http://127.0.0.1
+        cmd_settings:
+            port: 8545
+        explorer: https://api-rinkeby.etherscan.io/api
+
+development:
+  - name: Ganache-CLI
+    id: development
+    cmd: ganache-cli
+    host: http://127.0.0.1
+    cmd_settings:
+      port: 8549
+      gas_limit: 12000000
+      accounts: 10
+      evm_version: istanbul
+      mnemonic: brownie

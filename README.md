@@ -32,3 +32,22 @@ For the PoC...
 * We _could_ allow a forward-to address to be included instead of the bool. That's a pretty big can of worms, but that's worth thinking on. What this can be is a network of address you can 'walk', even just within this contract, there are circuits tracing a path from one key to another, `[k0:k1, k2:k2]` is another way of saying `k0 -> k1 -> k2`. And since the addition of the `k1` record was signed by `k0`, by induction you know you have a linked list of keys and therefore "cryptographic provenance" 🎩 👑 
    * This is a much much bigger can of worms
    * A pretty neat can of worms though
+
+# About brownie
+
+We expect there to be a `.env` file in your project root with the following line:
+
+> export PRIVATE_KEY="526fbabbd78b1dcc5-nom-nom-nom-a0aec16aa91448db33e9a0c9ff0129d749"
+
+In other words your 32 byte, 64 character hexidecimal private key (which of course you would not use if it were from mainnet! say it...!)
+
+```
+~/.brownie$ ls -l network-config.yaml
+lrwxrwxrwx 1 larry larry 36 May 15 15:12 network-config.yaml -> [SOME_PATH]/blacklist/network-config.yaml
+```
+
+That is, link the `network-config.yaml` in this repo to `~/.brownie/network-config.yaml` on your system (until "we" understand how to keep that bit in the repo correctly.)
+
+`geth` needs to be running and syncing with `rinkeby` and listening on the standard port on loopback.
+
+I think that's it...? _You_ need to figure out how to install `eth-brownie`. That's all you, bro.
