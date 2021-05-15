@@ -33,9 +33,17 @@ For the PoC...
    * This is a much much bigger can of worms
    * A pretty neat can of worms though
 
-# About brownie
+# Testing and Deployment
 
-"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. We use `eth-brownie` as a simple infrastructure tool.
+You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8485` (if configured per instructions). Geth is not hard. Inquire within.
+
+## Testing
+
+> ...
+
+## Deployment
+
+"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. We use [brownie](https://github.com/eth-brownie/brownie) as a simple infrastructure tool.
 
 Installing brownie will inevitably involve fiddling, but basically:
 
