@@ -80,4 +80,8 @@ The idea of having an address mapping to another address instead of a bool could
 * What do we do about loops?
 * This is all graph theory stuff, probably.
 
-Maybe the best idea would be to have a set of concepts that describe the fundamental ways addresses can relate to one-another. The address space can be overloaded with all kinds of meaningful relationships. These two are friends. This one owes a debt to that one according to this third. This one is in a very specific state of "trust" with that one (e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful whithout tying identities to addresses ....? It is not, I believe.)
+Maybe the best idea would be to have a set of concepts that describe the fundamental ways addresses can relate to one-another. The address space can be overloaded with all kinds of meaningful relationships.
+* These two are friends.
+* This one owes a debt to that one according to this third.
+* This one is in a very specific state of "trust" with that one
+   * e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful whithout tying identities to addresses ....? It is not, I believe.
