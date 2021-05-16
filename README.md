@@ -85,3 +85,5 @@ Maybe the best idea would be to have a set of concepts that describe the fundame
 * This one owes a debt to that one according to this third.
 * This one is in a very specific state of "trust" with that one
    * e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful whithout tying identities to addresses ....? It is not, I believe.
+* If we do say, "terminate" the chain of addresses with another contract, can we, should we, somehow indicate so?
+   * For example, let's say within one `AddressForwarding` contract instance, I forward `Q->R->S...` within the same mapping, and then decide I want to "jump" to another contract (maybe one that terminates or one that forwards or...). How do we indicate, "jumping to contact at address R that also implements `AddressForwardiing`?
