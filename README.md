@@ -33,7 +33,7 @@ For the PoC...
    * This is a much much bigger can of worms
    * A pretty neat can of worms though
 
-# Testing and Deployment
+# Deploying, Running, and Testing
 
 You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8545` (if configured per instructions). Geth is not hard. Inquire within.
 
@@ -58,7 +58,7 @@ Best of luck, pal!
 Once installed, there should be only two prerequisites to deploying (currently just to Rinkeby).
 
 1. Link the `network-config.yaml` file to your `~/.brownie/` directory.
-1. create a `./.env` file with the contents `export export PRIVATE_KEY="..."`
+1. create a `./.env` file with the contents `export PRIVATE_KEY="..."`
 
 Havning done that, you _should_ be able to
 
