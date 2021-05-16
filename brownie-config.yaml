@@ -6,7 +6,7 @@ autofetch_sources: False
 dotenv: .env
 
 networks:
-  default: rinkeby
+  default: development
   rinkeby:
     some_handy_var: '0x0'
 

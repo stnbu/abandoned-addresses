@@ -63,7 +63,7 @@ Once installed, there should be only two prerequisites to deploying (currently j
 Havning done that, you _should_ be able to
 
 ```bash
-brownie run ./scripts/deploy.py
+brownie run --network=rinkeby ./scripts/deploy.py
 ```
 
 And in ten seconds, give or take, you should have
@@ -72,3 +72,5 @@ And in ten seconds, give or take, you should have
 1. a new file at `./www/deployments/default.js` with the ABI and contract address.
 
 You should now be good to go. File an issue if something doesn't work.
+
+> :bulb: The `foo` in `--network=foo` refers to the values at `live.networks.id` and `development.id` in the file `~/.brownie/network-config.yaml` that's it! Nothing else! That is, the ID values found in the union of those two config values. (wonder how dupes are handled...)
