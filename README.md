@@ -75,7 +75,7 @@ You should now be good to go. File an issue if something doesn't work.
 
 The idea of having an address mapping to another address instead of a bool could be a productive idea. But a few things...
 
-* If we replaced bool with `address`, how would we indicate "end of the line"? We can't use the zero address (or could we), so instead you call another contract (this one) and call its method to say: "No more forwarding addresses! I'm going off-grid!" If that idea is to exist and we want simplity of design (?) then that seems like a better idea than arbitrarally declaring the zero address to be end-of-the-line...(?)
+* If we replaced bool with `address`, how would we indicate "end of the line"? We can't use the zero address (or could we), so instead you call another contract (this one) and call its method to say: "No more forwarding addresses! I'm going off-grid!" If that idea is to exist and we want simplicty of design (?) then that seems like a better idea than arbitrarally declaring the zero address to be end-of-the-line...(?)
    * What if say you want an address for everyone in your family and you have a son? Well, you might want to "terminate" the chain of address forwardings with a call to another contract, with another interface. This time, say one that forks and has a "self" address and a "child" address (for your child). This contract could spawn a contract for each that implements `AddressForwarding` (hypothetical given name.)
 * What do we do about loops?
 * This is all graph theory stuff, probably.
