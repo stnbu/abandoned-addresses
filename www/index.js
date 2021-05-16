@@ -187,7 +187,7 @@ $("#blacklistAddress").click(function() {
       // that shows a confirmation count
     })
     .on('receipt', function(receipt){
-      logEvent('receipt', reciept);
+      logEvent('receipt', receipt);
     })
     .on('error', function(error, receipt) {
       // If the transaction was rejected by the network with a receipt,
