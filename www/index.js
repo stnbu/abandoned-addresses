@@ -16,23 +16,12 @@
   [Ugly notes moved to the bottom]
 */
 
-/*
-Regarding EVM events (and not javascript events)...
-
-see: https://web3js.readthedocs.io/en/v1.3.4/web3-eth-contract.html?highlight=event#contract-events
-
-I believe we hook into the "Blacklisted" event with:
-
-  BLACKLIST.events.Blacklisted([options][, callback])
-
-* Does the above fire a javascript event for every event in the history of the contract?
-* If not, would it be practical to try and do that? How can it be done?
-* Does the above fire a javacript event for each event the contract fires "from now on"?
-* IOW, when does callback get called and how many times?
-* Do you see the event for other users of the contract ..... ? .... or just "yours"?
- */
-
-var CONTRACT_ADDRESS = "0x44b2A4Ae5ce1A1004F32620a48f18D3bDa8Cbd4a";
+console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
+// if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
+// button here -- $("#enableEthereumButton")
+// FIXME: I thought this always agreed with MM's "connected" indicator. I've seen once where MM was "connected" but this
+// was null !
+// UPDATE: if metamask extension disabled, the above throws an "undefined" error, as expected.
 
 if (typeof window.ethereum === 'undefined') {
   alert('Wallet provider is NOT Available!!');  // How do we respond?
@@ -148,66 +137,8 @@ window.ethereum.on('message', function(content) {
   // Anything that shows up here should be explicitly handled
 });
 
-// Uses the global CONTRACT_ADDRESS and returns an instance of the Blacklist contract (in web3-space)
-function getBlacklistContract() {
-  // what's the smart way to streamline all this stuff?
-  var abi = [
-    {
-      "inputs": [
-	{
-	  "internalType": "address",
-	  "name": "_address",
-	  "type": "address"
-	}
-      ],
-      "name": "blacklistAddress",
-      "outputs": [
-	{
-	  "internalType": "bool",
-	  "name": "",
-	  "type": "bool"
-	}
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-	{
-	  "indexed": true,
-	  "internalType": "address",
-	  "name": "_address",
-	  "type": "address"
-	}
-      ],
-      "name": "Blacklisted",
-      "type": "event"
-    },
-    {
-      "inputs": [
-	{
-	  "internalType": "address",
-	  "name": "_address",
-	  "type": "address"
-	}
-      ],
-      "name": "isBlacklisted",
-      "outputs": [
-	{
-	  "internalType": "bool",
-	  "name": "",
-	  "type": "bool"
-	}
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ];
-  return new web3.eth.Contract(abi, CONTRACT_ADDRESS);
-}
 // If we're going to be using globals, they should appear at the top of the file.
-var BLACKLIST = getBlacklistContract();
+var BLACKLIST = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.js
 
 // We have only one EVM (contract) event to worry about: "Blacklisted"
 BLACKLIST.events.Blacklisted({fromBlock: "earliest"}, function(incoming) {
