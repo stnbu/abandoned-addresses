@@ -32,3 +32,43 @@ For the PoC...
 * We _could_ allow a forward-to address to be included instead of the bool. That's a pretty big can of worms, but that's worth thinking on. What this can be is a network of address you can 'walk', even just within this contract, there are circuits tracing a path from one key to another, `[k0:k1, k2:k2]` is another way of saying `k0 -> k1 -> k2`. And since the addition of the `k1` record was signed by `k0`, by induction you know you have a linked list of keys and therefore "cryptographic provenance" 🎩 👑 
    * This is a much much bigger can of worms
    * A pretty neat can of worms though
+
+# Deploying, Running, and Testing
+
+You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8545` (if configured per instructions). Geth is not hard. Inquire within.
+
+## Testing
+
+> ...
+
+## Deployment
+
+"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. We use [brownie](https://github.com/eth-brownie/brownie) as a simple infrastructure tool.
+
+Installing brownie will inevitably involve fiddling, but basically:
+
+```bash
+python3 -m venv ~/venv3
+source ~/venv3/bin/activate
+pip3 install eth-brownie
+```
+
+Best of luck, pal!
+
+Once installed, there should be only two prerequisites to deploying (currently just to Rinkeby).
+
+1. Link the `network-config.yaml` file to your `~/.brownie/` directory.
+1. create a `./.env` file with the contents `export PRIVATE_KEY="..."`
+
+Havning done that, you _should_ be able to
+
+```bash
+brownie run ./scripts/deploy.py
+```
+
+And in ten seconds, give or take, you should have
+
+1. A successful deployment of `Blacklist.sol`
+1. a new file at `./www/deployments/default.js` with the ABI and contract address.
+
+You should now be good to go. File an issue if something doesn't work.
