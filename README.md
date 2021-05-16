@@ -73,4 +73,4 @@ And in ten seconds, give or take, you should have
 
 You should now be good to go. File an issue if something doesn't work.
 
-> :bulb: The `foo` in `--network=foo` refers to the values at `live.networks.id` and `development.id` in the file `~/.brownie/network-config.yaml` that's it! Nothing else! That is, the ID values found in the union of those two config values. (wonder how dupes are handled...)
+> :bulb: The `foo` in `--network=foo` refers to the values at `live.networks.id` and `development.id` in the file `~/.brownie/network-config.yaml` that's it! Nothing else! That is, the ID values found in the union of those two config paths. (wonder how dupes are handled...)
