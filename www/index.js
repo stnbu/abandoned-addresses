@@ -16,13 +16,6 @@
   [Ugly notes moved to the bottom]
 */
 
-console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
-// if window.ethereum.selectedAddress has a non-null value at this point, we could disable the [Enable Ethereum]
-// button here -- $("#enableEthereumButton")
-// FIXME: I thought this always agreed with MM's "connected" indicator. I've seen once where MM was "connected" but this
-// was null !
-// UPDATE: if metamask extension disabled, the above throws an "undefined" error, as expected.
-
 if (typeof window.ethereum === 'undefined') {
   alert('Wallet provider is NOT Available!!');  // How do we respond?
 }
