@@ -1,47 +1,67 @@
-PoC: https://dapps.unintuitive.org/blacklist/
+The PoC is here: https://dapps.unintuitive.org/abandoned-addresses/
 
 # The Idea...
 
-Blacklisting is an incredibly simple idea. It's just the idea of an "array", which is an idea going back a while, overloaded with a concept. "All of these are on the blacklist."
+Imagine finding yourself in one of the following situations:
 
-Likewise blacklisting on Ethereum should be that simple. And naturally there won't be one authoritative blacklist, nor should there. There's just a market of blacklists. The popular ones rise to the top. The same thing applies to widespread "ad filtering" software on browsers. They come with a compiled-in default only because that is the one that won the most confidence long ago. You're free to choose whatever you like. This doesn't try to be anything more complicated than a list of addresses, with a UI.
+* You find evidence that someone has handled the paper on which you've recorded your address' seed phrase. Say there's a smudge from someone else's finger. There isn't a lot of money in this wallet, _but_ you did use this address to identify yourself on some apps and to prove your identity in other ways.
+* You drop your hardware wallet at a resort while on vacation and later are able to retrieve it from the lost-and-found.
+* You and your cousin have a shared seed phrase. You both wrote it down together and decided to 'share' this address, as you have complete trust in her. Then you find out form someone else that she's being sued by someone for a large amount of money and is likely to lose.
+* Your great-grandmother has left you her Ethereum wallet in the form of a seed phrase that has been sitting in a filing cabinet for years. You check and all the money is still there, but you have no idea if anyone has had access to the seed phrase.
 
-* Only the key owner can blacklist their own key. This is not about reporting bad behavior, this is about declaring that you do not claim ownership of that key anymore. Maybe you lost the wallet? Maybe you shared the seed phrase with someone and you no longer trust that someone. You can assert: "This is not my key anymore. It's not _me_, I don't know who it is now."
-* What applications do with this is totally up for grabs, but the obvious thing would be, say, contract Q refuses to accept any address blacklisted by contract R.
-* There is no going back, you cannot un-blacklist yourself.
-* There is no central anything. This is just a proposition.
-* If we do have a dashboard it should go through the blockchain and find all blacklist contracts (by "interface") and make queries about them. Who has the most addresses? Who has the most recent update? Who is receiving the greatest rate-of-update? Which contracts are listed as "blacklisted" by other contracts?
+In the case of using your address for identification, in the above situations you may find yourself wondering if someone is now able to impersonate you.
+
+In the case of the wallet being used to store value, even if the value is still there, maybe the new, unknown "co-owners" of this wallet have decided to take their chances, bide their time and see if the balance goes _up_ any before completely draining your wallet!
+
+You should have the option of somehow declaring
+
+> This is no longer my address. From this point forward, I do not take responsibility for what happens with this address, I am explicitly abandoning it!
+
+Importantly, you cannot do this for addresses you no longer have access to [the private key]. How do you make the above declaration for a address you don't control? You cannot. Similarly, you cannot do it for someone else's address. We are only talking about **addresses that you currently control**.
+
+You could take out an ad in the paper. You could do a lot of things, but you want to do something useful and helpful.
+
+That is the idea behind this contract. There should be an agreed-upon, standard way of abandoning your Ethereum address. Naturally, there won't be one authoritative list of abandoned addresses, nor should there. There should be a market of solutions. The popular ones rise to the top. The same thing applies to widespread "ad filtering" software on browsers. They come with a compiled-in default only because that is the one that won the most confidence long ago. You're free to choose whatever you like. This doesn't try to be anything more complicated than a list of addresses, with a UI.
+
+* Only the address owner can abandon their own address. This is not about reporting bad behavior, this is about declaring that you do not claim ownership of that address anymore. Maybe you lost the wallet? Maybe you shared the seed phrase with someone and you no longer trust that someone. You can assert: "This is not my address anymore. It's not _me_, I don't know who it is now."
+* What applications do with this is totally up for grabs, but the obvious thing would be, say, contract `Q` refuses to accept any address abandoned by contract `R`.
+* There is no going back, you cannot un-abandon your address!
+* There is no central anything. This is just _an idea_ that is useful only in as much as it gains adoption.
+* With this contract, you do not have the option of adding "and this is my new address". You only can **abandon** an address, permanently.
+* You probably want to do some things with this address right beforehand (but ideally, _atomically_, along with the abandonment). This implementation does none of these things, but under consideration and open to ideas:
+   * Automatically create another wallet
+   * Move 100% of value out, and into another address
+   * Update references in other contracts
+
 
 # The Web UI
 
 For the PoC...
 
-* Without some kind of fundamental change, it will never be possible to "search" or "glob search" or anything like that on the keys. So there's no call for any "listing" of keys. It wouldn't make sense.
-* Super simple: A button that says "Connect with Metamask" (or its modern equivalent), "Blacklist my Address", and "Check if Blacklisted"
-   * The latter two have an address field next to them (`An Ethereum address is a 42 characters hexadecimal address derived from the last 20 bytes of the public key controlling the account with 0x appended in front. e.g., 0x71C7656EC7ab88b098defB751B7401B5f6d8976F`)
-   * The "Check if Blacklisted" has a "response" associated with it. If "yes", display one thing, if "no" display a different thing (e.g. "This key is NOT blacklisted" vs "this key IS blacklisted")
+* Without some kind of fundamental change, it will never be possible to "search" or "glob search" or anything like that on the addresses. So there's no call for any "listing" of addresses. It wouldn't make sense.
+   * Note that we do have _events_, which we might want to read off and list.
+* Super simple: A button that says "Enable Ethereum", "Abandon my Address", and "Check if Address Abandoned"
+   * "Enable Ethereum" connects to a/the wallet/provider.
+   * "Check if Address Abandoned" checks to see if this contract instance considers this particular address as "abandoned".
+   * "Abandon my Address" adds current wallet/provider's address to the list of abandoned address (after address owner confirms and signs for this.)
+   * Note:
+      * `An Ethereum address is a 42 characters hexadecimal address derived from the last 20 bytes of the public key controlling the account with 0x appended in front. e.g., 0x71C7656EC7ab88b098defB751B7401B5f6d8976F`
+      * We can and should show the so-called identicon and (if applicable) reverse-resolved ENS name(s) for the address being abandoned, making these obvious to the user.
 
 # The Contract
 
 * As simple as possible.
-* Has `blacklistAddress(<address>)` and `isBlacklisted(<address>)` the former will immediately revert if `msg.sender != address`, the latter just consults a `mapping(address => bool)` and returns the corresponding "is blacklisted?" value (True/False).
+* Has `abandonAddress(<address>)` and `isAbandoned(<address>)` the former MUST immediately revert if `msg.sender != address`, the latter just consults a `mapping(address => bool)` and returns the corresponding "is abandoned?" value (True/False).
+* Each successful call to `abandonAddress(foo)` MUST cause an `AddressAbandoned(foo)` event to be emitted.
 * There is no cost of any kind except for gas.
-* Like an ERC, I imagine there would just be a method spec, but I think it would ruin things if it were much more complicated. I-deas, yall? One could blacklist a blacklist by adding it to another blacklist, so that's already built in.
-* We _could_ allow a forward-to address to be included instead of the bool. That's a pretty big can of worms, but that's worth thinking on. What this can be is a network of address you can 'walk', even just within this contract, there are circuits tracing a path from one key to another, `[k0:k1, k2:k2]` is another way of saying `k0 -> k1 -> k2`. And since the addition of the `k1` record was signed by `k0`, by induction you know you have a linked list of keys and therefore "cryptographic provenance" 🎩 👑 
-   * This is a much much bigger can of worms
-   * A pretty neat can of worms though
+* Like an ERC, I imagine there would just be a method spec (above). It might ruin things if it were much more complicated. One could abandon an `AbandonedAddresses` contract instance with an entry in another `AbandonedAddresses` instance, so that ability is already built in.
+* We _could_ allow a forward-to address to be included instead of the bool. This simple change adds a large amount of complexity. What this can be is a network of address you can 'walk', even just within one contract instance, there are circuits tracing a path from one address to another, `[k0:k1, k2:k2]` is another way of saying `k0 -> k1 -> k2`. And since the addition of the `k1` record was signed by `k0`, by induction you know you have a linked list of addresses and therefore "cryptographic provenance". `AbandonedAddresses` does not do this. It is only for _abandoning_ addresses, but the idea is discussed some more below.
 
 # Deploying, Running, and Testing
 
-You will need a local ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8545` (if configured per instructions). Geth is not hard. Inquire within.
+You will need a local Ethereum client or some kind of HTTP-RPC at `http://127.0.0.1:8545` (if configured per instructions). Geth is not hard. Inquire within.
 
-## Testing
-
-> ...
-
-## Deployment
-
-"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. We use [brownie](https://github.com/eth-brownie/brownie) as a simple infrastructure tool.
+We use [brownie](https://github.com/eth-brownie/brownie) as a simple infrastructure tool.
 
 Installing brownie will inevitably involve fiddling, but basically:
 
@@ -51,20 +71,36 @@ source ~/venv3/bin/activate
 pip3 install eth-brownie
 ```
 
-Once installed, there should be only two prerequisites to deploying (currently just to Rinkeby).
+Once installed, there should be only two prerequisites to testing (either locally, with `ganache-cli` or against Rinkeby) or deploying (currently just to Rinkeby).
 
 1. Link the `network-config.yaml` file to your `~/.brownie/` directory.
-1. create a `./.env` file with the contents `export PRIVATE_KEY="..."`
+1. create a `./.env` file with the contents `export PRIVATE_KEY="..."` (only required for Rinkeby.)
 
-Having done that, you _should_ be able to
+## Testing
+
+To test against a local, ephemeral `ganache-cli` provider, just run:
+
+```bash
+brownie test
+```
+
+To test against Rinkeby:
+
+```bash
+brownie test --network=rinkeby
+```
+
+## Deployment
+
+"Deploying" this dApp is easy, just serve the contents of `./www` with a web server. But you need a deployed contract to interact with. You should be able to run:
 
 ```bash
 brownie run --network=rinkeby ./scripts/deploy.py
 ```
 
-And in ten seconds, give or take, you should have
+And in ten seconds, give or take, you should have:
 
-1. A successful deployment of `Blacklist.sol`
+1. A successful deployment of `AbandonedAddresses`
 1. a new file at `./www/deployments/default.js` with the ABI and contract address.
 
 You should now be good to go. File an issue if something doesn't work.
@@ -75,8 +111,8 @@ You should now be good to go. File an issue if something doesn't work.
 
 The idea of having an address mapping to another address instead of a bool could be a productive idea. But a few things...
 
-* If we replaced bool with `address`, how would we indicate "end of the line"? We can't use the zero address (or could we), so instead you call another contract (this one) and call its method to say: "No more forwarding addresses! I'm going off-grid!" If that idea is to exist and we want simplicty of design (?) then that seems like a better idea than arbitrarally declaring the zero address to be end-of-the-line...(?)
-   * What if say you want an address for everyone in your family and you have a child? Well, you might want to "terminate" the chain of address forwardings with a call to another contract, with another interface. This time, say one that forks and has a "self" address and a "child" address (for your child). This contract could spawn a contract for each that implements `AddressForwarding` (hypothetical given name.)
+* If we replaced bool with `address`, how would we indicate "end of the line"? We can't use the zero address (or could we), so instead you call another contract (this one) and call its method to say: "No more forwarding addresses! I'm going off-grid!" If that idea is to exist and we want simplicity of design (?) then that seems like a better idea than arbitrarily declaring the zero address to be end-of-the-line...(?)
+   * What if say you want an address for everyone in your family and you have a child? Well, you might want to "terminate" the chain of address forwardings with a call to another contract, with another interface. This time, say one that forks and has a "self" address and a "child" address (for your child). This contract could spawn a contract for each that implements `ForwardedAddresses` (proposed name.)
 * What do we do about loops?
 * This is all graph theory stuff, probably.
 
@@ -84,6 +120,6 @@ Maybe the best idea would be to have a set of concepts that describe the fundame
 * These two are friends.
 * This one owes a debt to that one according to this third.
 * This one is in a very specific state of "trust" with that one
-   * e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful whithout tying identities to addresses ....? It is not, I believe.
+   * e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful without tying identities to addresses ....? It is not, I believe.
 * If we do say, "terminate" the chain of addresses with another contract, can we, should we, somehow indicate so?
-   * For example, let's say within one `AddressForwarding` contract instance, I forward `Q->R->S`, and then decide I want to "jump" to another contract (maybe one that terminates or one that forwards or...). How do we indicate, "Address `S` is "jumping" to contact at address `X` that also implements `AddressForwardiing` (or `Blacklist`)?
+   * For example, let's say within one `ForwardedAddresses` contract instance, I forward `Q->R->S`, and then decide I want to "jump" to another contract (maybe one that terminates or one that forwards or...). How do we indicate, "Address `S` is "jumping" to contact at address `X` that also implements `ForwardedAddresses` (or `AbandonedAddresses`)?

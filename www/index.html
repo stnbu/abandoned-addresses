@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Ethereum Address Blacklist</title>
+ <title>Permanently Abandon your Ethereum Address</title>
 </head>
 <body class="container">
-  <h1>Hi! I am <a href="https://github.com/stnbu/blacklist">Blacklist!</a></h1>
-  <h1>Use this Form to Permanently Blacklist your Ethereum Address</h1>
+  <h1>Hi! I am <a href="https://github.com/stnbu/abandon">AbandonedAddresses!</a>, a simple PoC contract that proposes a standard way to "abandon" an Ethereum address.</h1>
+  <h1>Use this Form to Permanently Abandon your Ethereum Address</h1>
   <button id="enableEthereumButton">Enable Ethereum</button>
 
   <hr />
 
-  <h3>Use this to check blacklist status of address</h3>
+  <h3>Use this to check if an address has been abandoned:</h3>
 
   <form>
-    <label for="getIsBlacklisted">Check if Address Blacklisted:</label><br>
-    <!-- It occurs to me that you can only blacklist one address -- yours, so why not pre-populate this and make it uneditable? -->
-    <input type="text" id="isBlacklisted" name="isBlacklisted" value=""><br><br>
-    <input type="button" id="getIsBlacklisted" value="Check">
+    <label for="getIsAbandoned">Check if Address Abandoned:</label><br>
+    <!-- It occurs to me that you can only abandon one address -- yours, so why not pre-populate this and make it uneditable? -->
+    <input type="text" id="isAbandoned" name="isAbandoned" value=""><br><br>
+    <input type="button" id="getIsAbandoned" value="Check">
   </form>
 
   <hr />
 
-  <h3>Use this to permanently blacklist your own address</h3>
+  <h3>Use this to PERMANENTLY abandon your own address:</h3>
 
   <form>
-    <label for="blacklistedAddress">Address to Blacklist:</label><br>
-    <input type="text" id="blacklistedAddress" name="blacklistedAddress" value=""><br><br>
-    <input type="button" id="blacklistAddress" value="Blacklist Address">
+    <label for="abandonedAddress">Address to Abandon:</label><br>
+    <input type="text" id="abandonedAddress" name="abandonedAddress" value=""><br><br>
+    <input type="button" id="abandonAddress" value="Abandon Address">
   </form>
 </body>
 <!-- cdn, for now -->

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pytest
-from brownie import network, Blacklist, config, accounts
+from brownie import network, AbandonedAddresses, config, accounts
 
 @pytest.fixture(scope="module")
 def get_account():
@@ -12,4 +12,4 @@ def get_account():
         pytest.skip("Invalid network/wallet specified ")
 
 def test_deploy(get_account):
-    assert Blacklist.deploy({"from": get_account})
+    assert AbandonedAddresses.deploy({"from": get_account})
