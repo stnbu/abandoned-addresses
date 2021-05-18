@@ -140,7 +140,13 @@ ABANDONED_ADDRESSES.events.AddressAbandoned({fromBlock: "earliest"}, function(in
 
 async function getAccount() {
   window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    signer.signMessage('Some data').then((x) => {
+      debugger;
+    });
     console.log("we succesfully connected to *A* wallet. the data we got was `" + JSON.stringify(accounts) + "`");
+    debugger;
   });
 }
 

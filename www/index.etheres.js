@@ -1,3 +1,11 @@
+// const provider = new ethers.providers.Web3Provider(window.ethereum);
+// const signer = provider.getSigner();
+
+// signer.signMessage('Some data').then((x) => {
+//   debugger;
+// });
+
+// debugger;
 /*
 
 <script type="module">
@@ -64,5 +72,33 @@ signature = await signer.signMessage(messageBytes) // To sign a hash, you most o
     });
 }
 // ------------------------------------------------------
+provider.getBalance("ricmoo.firefly.eth");
+provider.getCode("registrar.firefly.eth");
+provider.getStorageAt("registrar.firefly.eth", 0)
+provider.getTransactionCount("ricmoo.firefly.eth");
+provider.getBlock(100004)
+provider.getBlockWithTransactions(100004)
+// ------------------------------------------------------
+provider.lookupAddress( address )
+provider.resolveName( name )
+// ------------------------------------------------------
+signer.unlock( password )
+// ------------------------------------------------------
+const contract = new ethers.Contract(contractAddress, abi, provider);
+const value = await contract.getValue();
+// ------------------------------------------------------
+const contract = new ethers.Contract(contractAddress, abi, signer); // pass a signer to create a contract instance for state changing operations
+const tx = await contract.changeValue(33);
+const receipt = await tx.wait();
+// ------------------------------------------------------
+ethers.utils.id('hello world') // ethers (hash of a string)
+ethers.utils.keccak256('0x4242') // ethers (hash of binary data)
+// ------------------------------------------------------
+// ------------------------------------------------------
 // ------------------------------------------------------
 */
+
+
+/*
+It's worth remarking, this is cool: https://docs.ethers.io/v5/api/providers/#providers--networks--custom-ens-contract
+ */

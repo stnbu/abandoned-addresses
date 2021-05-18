@@ -123,3 +123,7 @@ Maybe the best idea would be to have a set of concepts that describe the fundame
    * e.g. I am trusting that this address will never send ether to that address. If it does, I have the right to call this other contract that will economically punish sender. How is this meaningful without tying identities to addresses ....? It is not, I believe.
 * If we do say, "terminate" the chain of addresses with another contract, can we, should we, somehow indicate so?
    * For example, let's say within one `ForwardedAddresses` contract instance, I forward `Q->R->S`, and then decide I want to "jump" to another contract (maybe one that terminates or one that forwards or...). How do we indicate, "Address `S` is "jumping" to contact at address `X` that also implements `ForwardedAddresses` (or `AbandonedAddresses`)?
+
+# Stuff with nowhere else to go
+
+* https://eips.ethereum.org/EIPS/eip-634
