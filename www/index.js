@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 /*
-  Interact with the reference Blacklist contract on Rinkeby
+  Interact with the reference AbandonedAddresses contract.
 
-  URL: https://dapps.unintuitive.org/blacklist/
+  URL: https://dapps.unintuitive.org/abandoned-addresses/
 
   1. Switch to "Rinkeby" in MetaMask, and click on [Enable Ethereum].
   1. Open browser's javascript console.
@@ -10,10 +10,8 @@
 
   Contributors.
 
-  mb@unintuitive.org
-  adam_AT_THE_D0MA1N_CALLED_americanretailusa.com 
-
-  [Ugly notes moved to the bottom]
+  * Mike Burr <mb@unintuitive.org>
+  * Adam Soper <adam@americanretailusa.com>
 */
 
 if (typeof window.ethereum === 'undefined') {
@@ -106,9 +104,9 @@ window.ethereum.on('chainChanged', function(toChain) {
   //
   // Or... we could simply have a mapping:
   //
-  //  blacklistContractAddresses = {"0x5": "0xffffff..."}  // mapping of chain ID and contract address.
+  //  abandonedAddressesContractMapping = {"0x5": "0xffffff..."}  // mapping of chain ID and contract address.
   //
-  // Change the contract value, re-init BLACKLIST and put up a conspicous banner if we are on a testnet
+  // Change the contract value, re-init ABANDONED_ADDRESSES and put up a conspicous banner if we are on a testnet
   // (maybe nothing if mainnet)
   //
   // Also, using the same info (contract address) we could have a link to the correct etherscan page for the contract.
@@ -131,13 +129,13 @@ window.ethereum.on('message', function(content) {
 });
 
 // If we're going to be using globals, they should appear at the top of the file.
-var BLACKLIST = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.js
+var ABANDONED_ADDRESSES = new web3.eth.Contract(ABI, CONTRACT_ADDRESS); // set by ./deployments/default.js
 
-// We have only one EVM (contract) event to worry about: "Blacklisted"
-BLACKLIST.events.Blacklisted({fromBlock: "earliest"}, function(incoming) {
+// We have only one EVM (contract) event to worry about: "AddressAbandoned"
+ABANDONED_ADDRESSES.events.AddressAbandoned({fromBlock: "earliest"}, function(incoming) {
   // Turns out `incoming` is `null` ...wtf?
   // Also, this can either take a looong time, or possibly never comes sometimes. Strange!
-  logEvent('blacklisted_evm_event', incoming);
+  logEvent('abandoned_evm_event', incoming);
 });
 
 async function getAccount() {
@@ -150,25 +148,25 @@ $("#enableEthereumButton").click(function() {
   getAccount();
 });
 
-$("#getIsBlacklisted").click(function() {
-  let address = $("#isBlacklisted").val();
-  transaction = BLACKLIST.methods.isBlacklisted(address);
-  transaction.call({from: window.ethereum.selectedAddress}, function (error, isBlacklisted) {
+$("#getIsAbandoned").click(function() {
+  let address = $("#isAbandoned").val();
+  transaction = ABANDONED_ADDRESSES.methods.isAbandoned(address);
+  transaction.call({from: window.ethereum.selectedAddress}, function (error, isAbandoned) {
     if (!error) {
-      if (isBlacklisted) {
-        console.log(address + " IS blacklisted");
+      if (isAbandoned) {
+        console.log(address + " IS abandoned");
       } else {
-        console.log(address + " IS NOT blacklisted");
+        console.log(address + " IS NOT abandoned");
       }
     } else {
-      console.log("error while checking blacklisted status: " + error);
+      console.log("error while checking abandoned status: " + error);
     }
   });
 });
 
-$("#blacklistAddress").click(function() {
-  let address = $("#blacklistedAddress").val();
-  transaction = BLACKLIST.methods.blacklistAddress(address);
+$("#abandonAddress").click(function() {
+  let address = $("#abandonedAddress").val();
+  transaction = ABANDONED_ADDRESSES.methods.abandonAddress(address);
   transaction.send({from: window.ethereum.selectedAddress})
     .on('transactionHash', function(hash){
       logEvent('transactionHash', hash);
@@ -176,7 +174,7 @@ $("#blacklistAddress").click(function() {
     .on('confirmation', function(confirmationNumber, receipt) {
       // NOTE: we abuse error= field for confirmation number
       logEvent('confirmation', receipt, "(conf_num=" + confirmationNumber + "[not_an_error])");
-      // We have the confirmation number here. If someone blacklists an address, we could have a widget
+      // We have the confirmation number here. If someone abandons an address, we could have a widget
       // that shows a confirmation count
     })
     .on('receipt', function(receipt){
@@ -191,27 +189,3 @@ $("#blacklistAddress").click(function() {
       // always runs (for each event?)
     });
 });
-
-/*
-  Outstanding weird bug...
-
-  When I switch wallets in MM, and then do a "blacklistAddress", I get a weird error deep in the guts that I cannot diagnose.
-  If I do a subsequent blacklistAddress with the now-switched-to wallet, is ok.
-  UPDATE: Maybe not... need to examine [object] passed to listeners
-
-  Stuff to be investigated/implemented...
-
-  Web3.givenProvider  // <-- what is this, do we care?
-  web3.eth.accounts.getAccounts()  // <-- do we care?
-  //// To sign a transaction
-  web3.eth.accounts.signTransaction({
-  to: '0xF0109fC8DF283027b6285cc889F5aA624EaC1F55',
-  value: '1000000000',
-  gas: 2000000
-  }, '0x4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318')
-  .then(console.log);
-  //// To resolve a *.eth name
-  web3.eth.ens.resolver('ethereum.eth').then(function (contract) {
-  console.log(contract);
-  });
-*/
