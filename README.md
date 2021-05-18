@@ -5,7 +5,7 @@ The PoC is here: https://dapps.unintuitive.org/abandoned-addresses/
 Imagine finding yourself in one of the following situations:
 
 * You find evidence that someone has handled the paper on which you've recorded your address' seed phrase. Say there's a smudge from someone else's finger. There isn't a lot of money in this wallet, _but_ you did use this address to identify yourself on some apps and to prove your identity in other ways.
-* You drop your hardware wallet at a resort while on vacation and later are able to retrieve it from the lost-and-found.
+* You drop your hardware wallet at a resort while on vacation and later are able to retrieve it from the lost-and-found. The attendant gives you a knowing smile...
 * You and your cousin have a shared seed phrase. You both wrote it down together and decided to 'share' this address, as you have complete trust in her. Then you find out form someone else that she's being sued by someone for a large amount of money and is likely to lose.
 * Your great-grandmother has left you her Ethereum wallet in the form of a seed phrase that has been sitting in a filing cabinet for years. You check and all the money is still there, but you have no idea if anyone has had access to the seed phrase.
 
