@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
@@ -18,7 +19,7 @@ func main() {
 		fmt.Errorf("Failed to connect to the Ethereum client: %v\n", err)
 	}
 
-	aa, err := contract.NewAbandonedAddresses(common.HexToAddress("0x915AB0674D678E42E97eC3187d8DE5953b95C1DD"), conn)
+	aa, err := contract.NewAbandonedAddressesCaller(common.HexToAddress("0x915AB0674D678E42E97eC3187d8DE5953b95C1DD"), conn)
 	if err != nil {
 		fmt.Errorf("Failed to instantiate contract: %v", err)
 	}
@@ -26,7 +27,8 @@ func main() {
 
 	addr := common.HexToAddress("0xafe8d48DeFC7B96912C638C8900CB71dDB1acEC4")
 
-	isab, err := aa.AbandonedAddressesCaller.IsAbandond(addr)
+	//callOpts := &bind.CallOpts{Context: context.Background()}
+	isab, err := aa.IsAbandoned(&bind.CallOpts{}, addr)
 	// isab, err := aa.IsAbandond(addr)
 	if err != nil {
 		fmt.Errorf("Failed to check if address abandoned: %v", err)
