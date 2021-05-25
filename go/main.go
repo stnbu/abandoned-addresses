@@ -1,16 +1,20 @@
+// Interact with AbandonedAddresses using go-ethereum/ethclient
 
 package main
 
 import (
-	"context"
 	"fmt"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 
 	"github.com/stnbu/abandoned-addresses/go/contract"
+)
 
-	"math/big"
+const (
+	CONTRACT_ADDRESS = "0x915AB0674D678E42E97eC3187d8DE5953b95C1DD"
+	TEST_ADDRESS = "0xfB347F5c31c2653206c222793Fb1722A2E5D01Dd"
 )
 
 func main() {
@@ -18,69 +22,21 @@ func main() {
 	if err != nil {
 		fmt.Errorf("Failed to connect to the Ethereum client: %v\n", err)
 	}
-
-	aa, err := contract.NewAbandonedAddressesCaller(common.HexToAddress("0x915AB0674D678E42E97eC3187d8DE5953b95C1DD"), conn)
+	abandonedAddresses, err := contract.NewAbandonedAddressesCaller(
+		common.HexToAddress(CONTRACT_ADDRESS), conn)
 	if err != nil {
 		fmt.Errorf("Failed to instantiate contract: %v", err)
 	}
-	fmt.Printf("A new contract! -- %v\n", aa)
 
-	addr := common.HexToAddress("0xafe8d48DeFC7B96912C638C8900CB71dDB1acEC4")
+	testAddress := common.HexToAddress(TEST_ADDRESS)
 
-	//callOpts := &bind.CallOpts{Context: context.Background()}
-	isab, err := aa.IsAbandoned(&bind.CallOpts{}, addr)
-	// isab, err := aa.IsAbandond(addr)
+	isAbandoned, err := abandonedAddresses.IsAbandoned(&bind.CallOpts{}, testAddress)
 	if err != nil {
 		fmt.Errorf("Failed to check if address abandoned: %v", err)
 	}
-	if isab {
-		fmt.Println("IS IS IS abandoned!")
+	if isAbandoned {
+		fmt.Printf("Address %s IS abandoned\n", testAddress)
+	} else {
+		fmt.Printf("Address %s IS NOT abandoned\n", testAddress)
 	}
-	
-	ctx := context.Background()
-	block, _ := conn.BlockByNumber(ctx, big.NewInt(123))
-	fmt.Printf("block: %v\n", block)
-
-	balance, _ := conn.BalanceAt(ctx, addr, nil)
-	fmt.Printf("balance of addr: %v\n", balance)
-
-	// tx := new(types.Transaction)
-	// err = conn.SendTransaction(ctx, tx)
-
-	progress, _ := conn.SyncProgress(ctx)
-	fmt.Printf("progress: %v", progress)
-
-	//fmt.Println(conn)
-
-	// dotevn:
-	//   addr: 0xfB347F5c31c2653206c222793Fb1722A2E5D01Dd
-	//   priv: 526fbabbd786b1dcc50693fa6075e8a0aec16aa91448db33e9a0c9ff0129d749
-
-
-	/*
-	// SOME JUNK. REFERNCE...
-	   
-	// Retrieve the pending nonce for an account
-	nonce, err := conn.NonceAt(ctx, addr, nil)
-	to := addr // common.HexToAddress("0xABCD")
-	amount := big.NewInt(10 * params.GWei)
-	gasLimit := uint64(21000)
-	gasPrice := big.NewInt(10 * params.GWei)
-	data := []byte{}
-	// Create a raw unsigned transaction
-	tx := types.NewTransaction(nonce, to, amount, gasLimit, gasPrice, data)
-	/////
-
-
-	/////
-	// Use secret key hex string to sign a raw transaction
-	SK := "526fbabbd786b1dcc50693fa6075e8a0aec16aa91448db33e9a0c9ff0129d749"
-	sk := crypto.ToECDSAUnsafe(common.FromHex(SK))// Sign the transaction
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(nil), sk)
-	// You could also create a TransactOpts object
-	opts := bind.NewKeyedTransactor(sk)
-	// To get the address corresponding to your private key
-	addr := crypto.PubkeyToAddress(sk.PublicKey)
-	/////
-	*/
 }
