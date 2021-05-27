@@ -1,309 +1,309 @@
-        html, body {
-            font-family: "Avenir", "Avenir Book", sans-serif;
-            padding: 0;
-            margin: 0;
-            font-size: 16px;
-        }
-        
-        .page-container {
-            background-image: url("page-container_background-image.png");;
-            min-height: 100vh;
-            background-size: 150%;
-            background-repeat: no-repeat;
-            background-position: left -19vw bottom;
-            position: relative;
-        }
-        
-        .header {
-            background-color: #fff;
-            padding: 1vw 4vw;
-            margin-top: .5em;
-        }
-        
-        .logo-block {
-            display: inline-block;
-            width: 50%;
-            vertical-align: middle;
-            font-size: 1.45vw;
-        }
-        
-        .logo {
-            line-height: 1em;
-            font-size: 1.5em;
-            padding: 0;
-            margin: 0;
-            letter-spacing: 0.4em;
-            font-weight: 100;
-        }
-        
-        .bold-text {
-            font-weight: 900;
-        }
-        
-        .logo-subtext {
-            padding: .1em 0;
-            margin: 0;
-            font-size: 1em;
-            font-weight: 100;
-            letter-spacing: .2em;
-        }
-        
-        .button-block {
-            display: inline-block;
-            width: 50%;
-            vertical-align: middle;
-            text-align: right;
-        }
-        
-        .button-block div:first-child {
-            margin-right: 2em;
-        }
-        
-        .ghost-button {
-            padding: .35em 2em;
-            font-size: 1em;
-            font-weight: 300;
-            display: inline-block;
-            vertical-align: middle;
-            cursor: pointer;
-            transition: all .25s;
-        }
-        
-        .standard-button {
-            padding: .5em 2em;
-            font-size: 1em;
-            font-weight: 500;
-            display: inline-block;
-            vertical-align: middle;
-            background-color: #2D2C2C;
-            color: #fff;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all .25s;
-        }
-        
-        .orange-button {
-            background-color: #FF9E3E;
-        }
-        
-        .illustration-container {
-            width: 50%;
-            display: inline-block;
-        }
-        
-        .illustration {
-            width: 100%;
-            display: none;
-        }
-        
-        .content-container {
-            text-align: right;
-        }
-        
-        .form-container {
-            display: inline-block;
-            width: 90%;
-            max-width: 500px;
-            background-color: #fff;
-            padding: 0 2em 20px 2em;
-            margin: 2em 4vw 0 0;
-            box-sizing: border-box;
-            text-align: center;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px -10px #0005;
-        }
-        
-        .account-block {
-            padding-top: 2em;
-            border-bottom: 2px solid #F1F1F1;
-            padding-bottom: 2em;
-        }
-        
-        .identicon-wrapper {
-            
-        }
-        
-        .identicon {
-            width: 100%;
-        }
-        
-        .identicon canvas {
-            width: 20% !important;
-            height: 20% !important;
-            border-radius: 100%;
-        }
-        
-        .name {
-            padding: 0;
-            margin: .5em 0 .25em 0;
-            font-weight: 500;
-        }
-        
-        .address {
-            font-weight: 100;
-            font-size: .85em;
-            color: #B9B9B9;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .abandon-block {
-            
-        }
-        
-        .status-wrapper {
-            margin: 2em 0;
-        }
-        
-        .status {
-            padding: 0;
-            margin: 0;
-            display: inline-block;
-            vertical-align: middle;
-            font-weight: 500;
-        }
-        
-        .status-icon {
-            display: inline-block;
-            vertical-align: middle;
-            width: 1.5em;
-            height: 1.5em;
-            margin-left: .5em;
-        }
-        
-        .status-icon.active {
-            background: url("status-icon_active.png");
-            background-size: 100%;
-        }
-        
-        .status-icon.abandoned {
-            background: url("status-icon_abandoned.png");
-            background-size: 100%;
-        }
-        
-        .warning-label {
-            margin-top: 3em;
-            font-weight: 100;
-            font-size: .75em;
-            color: #B9B9B9;
-        }
-        
-        .warning {
-            font-weight: 900;
-        }
-        
-        .github-link {
-            position: absolute;
-            bottom: 1em;
-            right: 5%;
-            color: #7F7F7F;
-        }
-        
-        .standard-link {
-            font-weight: 900;
-            text-decoration: none;
-            color: #7F7F7F;
-        }
-        
-        .standard-link:hover {
-            text-decoration: underline;
-        }
-        
-        .ghost-button:hover {
-            transform: translateY(-2px);
-            text-shadow: 0 4px 4px #0003;
-        }
-        
-        .standard-button:hover {
-            background-color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px #0003;
-        }
-        
-        .orange-button:hover {
-            background-color: #ff8c19;
-        }
-        
-        @media only screen and (min-width: 2000px) {
-            .header {
-                background-color: #fff;
-                padding: 1em 4em;
-                margin-top: .5em;
-            }
+html, body {
+    font-family: "Avenir", "Avenir Book", sans-serif;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+}
 
-            .logo-block {
-                display: inline-block;
-                width: 50%;
-                vertical-align: middle;
-                font-size: 1.5em;
-            }
-            
-            .page-container {
-                background-size: 200vh;
-                background-repeat: repeat-x;
-            }
-            
-            .content-container {
-                text-align: center;
-            }
-            
-            .form-container {
-                margin-right: 0;
-                max-width: 800px;
-                padding-bottom: 40px;
-            }
-        }
-        
-        @media only screen and (max-width: 900px) {
-            .page-container {
-                background-size: 185%;
-                background-position: left bottom;
-            }
-            
-            .content-container {
-                text-align: center;
-            }
-            
-            .form-container {
-                margin-right: 0;
-            }
-            
-            .logo-block {
-                width: 100%;
-                margin-top: 1em;
-                text-align: center;
-                font-size: 1.125em;
-            }
-            
-            .button-block {
-                width: 100%;
-                text-align: center;
-                margin-top: 1em;
-            }
-        }
-        
-        @media only screen and (max-width: 600px) {
-            .page-container {
-                background-size: 185%;
-                background-position: left bottom;
-            }
-            
-            .content-container {
-                text-align: center;
-            }
-            
-            .form-container {
-                margin-right: 0;
-            }
-            
-            .logo-block {
-                font-size: 2.5vw;
-            }
-            
-            .button-block {
-                width: 100%;
-                text-align: center;
-                margin-top: 1em;
-                font-size: 2.5vw;
-            }
-        }
+.page-container {
+    background-image: url("page-container_background-image.png");;
+    min-height: 100vh;
+    background-size: 150%;
+    background-repeat: no-repeat;
+    background-position: left -19vw bottom;
+    position: relative;
+}
+
+.header {
+    background-color: #fff;
+    padding: 1vw 4vw;
+    margin-top: .5em;
+}
+
+.logo-block {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+    font-size: 1.45vw;
+}
+
+.logo {
+    line-height: 1em;
+    font-size: 1.5em;
+    padding: 0;
+    margin: 0;
+    letter-spacing: 0.4em;
+    font-weight: 100;
+}
+
+.bold-text {
+    font-weight: 900;
+}
+
+.logo-subtext {
+    padding: .1em 0;
+    margin: 0;
+    font-size: 1em;
+    font-weight: 100;
+    letter-spacing: .2em;
+}
+
+.button-block {
+    display: inline-block;
+    width: 50%;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.button-block div:first-child {
+    margin-right: 2em;
+}
+
+.ghost-button {
+    padding: .35em 2em;
+    font-size: 1em;
+    font-weight: 300;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.standard-button {
+    padding: .5em 2em;
+    font-size: 1em;
+    font-weight: 500;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #2D2C2C;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.orange-button {
+    background-color: #FF9E3E;
+}
+
+.illustration-container {
+    width: 50%;
+    display: inline-block;
+}
+
+.illustration {
+    width: 100%;
+    display: none;
+}
+
+.content-container {
+    text-align: right;
+}
+
+.form-container {
+    display: inline-block;
+    width: 90%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 0 2em 20px 2em;
+    margin: 2em 4vw 0 0;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px -10px #0005;
+}
+
+.account-block {
+    padding-top: 2em;
+    border-bottom: 2px solid #F1F1F1;
+    padding-bottom: 2em;
+}
+
+.identicon-wrapper {
+
+}
+
+.identicon {
+    width: 100%;
+}
+
+.identicon canvas {
+    width: 20% !important;
+    height: 20% !important;
+    border-radius: 100%;
+}
+
+.name {
+    padding: 0;
+    margin: .5em 0 .25em 0;
+    font-weight: 500;
+}
+
+.address {
+    font-weight: 100;
+    font-size: .85em;
+    color: #B9B9B9;
+    padding: 0;
+    margin: 0;
+}
+
+.abandon-block {
+
+}
+
+.status-wrapper {
+    margin: 2em 0;
+}
+
+.status {
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 500;
+}
+
+.status-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.5em;
+    height: 1.5em;
+    margin-left: .5em;
+}
+
+.status-icon.active {
+    background: url("status-icon_active.png");
+    background-size: 100%;
+}
+
+.status-icon.abandoned {
+    background: url("status-icon_abandoned.png");
+    background-size: 100%;
+}
+
+.warning-label {
+    margin-top: 3em;
+    font-weight: 100;
+    font-size: .75em;
+    color: #B9B9B9;
+}
+
+.warning {
+    font-weight: 900;
+}
+
+.github-link {
+    position: absolute;
+    bottom: 1em;
+    right: 5%;
+    color: #7F7F7F;
+}
+
+.standard-link {
+    font-weight: 900;
+    text-decoration: none;
+    color: #7F7F7F;
+}
+
+.standard-link:hover {
+    text-decoration: underline;
+}
+
+.ghost-button:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 4px #0003;
+}
+
+.standard-button:hover {
+    background-color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px #0003;
+}
+
+.orange-button:hover {
+    background-color: #ff8c19;
+}
+
+@media only screen and (min-width: 2000px) {
+    .header {
+        background-color: #fff;
+        padding: 1em 4em;
+        margin-top: .5em;
+    }
+
+    .logo-block {
+        display: inline-block;
+        width: 50%;
+        vertical-align: middle;
+        font-size: 1.5em;
+    }
+
+    .page-container {
+        background-size: 200vh;
+        background-repeat: repeat-x;
+    }
+
+    .content-container {
+        text-align: center;
+    }
+
+    .form-container {
+        margin-right: 0;
+        max-width: 800px;
+        padding-bottom: 40px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .page-container {
+        background-size: 185%;
+        background-position: left bottom;
+    }
+
+    .content-container {
+        text-align: center;
+    }
+
+    .form-container {
+        margin-right: 0;
+    }
+
+    .logo-block {
+        width: 100%;
+        margin-top: 1em;
+        text-align: center;
+        font-size: 1.125em;
+    }
+
+    .button-block {
+        width: 100%;
+        text-align: center;
+        margin-top: 1em;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .page-container {
+        background-size: 185%;
+        background-position: left bottom;
+    }
+
+    .content-container {
+        text-align: center;
+    }
+
+    .form-container {
+        margin-right: 0;
+    }
+
+    .logo-block {
+        font-size: 2.5vw;
+    }
+
+    .button-block {
+        width: 100%;
+        text-align: center;
+        margin-top: 1em;
+        font-size: 2.5vw;
+    }
+}
