@@ -167,8 +167,7 @@ $("#getIsAbandoned").click(function() {
 });
 
 $("#abandonAddress").click(function() {
-  let address = $("#abandonedAddress").val();
-  transaction = ABANDONED_ADDRESSES.methods.abandonAddress(address);
+  transaction = ABANDONED_ADDRESSES.methods.abandonAddress(window.ethereum.selectedAddress);
   transaction.send({from: window.ethereum.selectedAddress})
     .on('transactionHash', function(hash){
       logEvent('transactionHash', hash);
