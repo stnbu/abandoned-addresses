@@ -86,7 +86,7 @@ ABANDONED_ADDRESSES.events.AddressAbandoned({fromBlock: "earliest"}, function(in
 
 async function getAccount() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-	updateThing();
+	setCurrentAddressElements();
 	console.log("we succesfully connected to *A* wallet. the data we got was `" + JSON.stringify(accounts) + "`");
     });
 }
@@ -95,21 +95,37 @@ $("#enableEthereumButton").click(function() {
     getAccount();
 });
 
-$("#getIsAbandoned").click(function() {
-    let address = $("#isAbandoned").val();
+function updateBalance(address) {
+    web3.eth.getBalance(address, function(err, result) {
+	if (err) {
+	    alert(err);
+	} else {
+	    let ether_balance = web3.utils.fromWei(result, "ether")
+	    let balance = (Math.round(ether_balance * 100) / 100).toFixed(3);
+	    document.getElementById("currentAddressBalance").innerHTML = balance;
+	}
+    });
+}
+
+function checkAddress() {
+    let address = $("#addressSearch").val();
     transaction = ABANDONED_ADDRESSES.methods.isAbandoned(address);
     transaction.call({from: window.ethereum.selectedAddress}, function (error, isAbandoned) {
 	if (!error) {
-	    if (isAbandoned) {
-		console.log(address + " IS abandoned");
+	    let icon = getIdenticon(address);
+	    document.getElementById("identiconSearch").appendChild(icon);
+	    if(isAbandoned) {
+		searchTabBlock.classList.remove("hidden");
+		searchTabBlock.classList.remove("error");
 	    } else {
-		console.log(address + " IS NOT abandoned");
+		searchTabBlock.classList.add("hidden");
+		searchTabBlock.classList.add("error");
 	    }
 	} else {
-	    console.log("error while checking abandoned status: " + error);
+	    alert("error while checking abandoned status: " + error);
 	}
     });
-});
+}
 
 $("#abandonAddress").click(function() {
     transaction = ABANDONED_ADDRESSES.methods.abandonAddress(window.ethereum.selectedAddress);
@@ -146,19 +162,6 @@ function switchTab(elem) {
     }
 }
 
-function checkAddress() {
-    var address = document.getElementById("addressSearch").value;
-    // TODO: Should check for success of address look up
-    var isValidAddress = searchTabBlock.classList.contains("hidden");
-    if(isValidAddress) {
-        searchTabBlock.classList.remove("hidden");
-        searchTabBlock.classList.remove("error");
-    } else {
-        searchTabBlock.classList.add("hidden");
-        searchTabBlock.classList.add("error");
-    }
-}
-
 function getIdenticon(address) {
     return blockies.create({
         seed: address,
@@ -168,13 +171,17 @@ function getIdenticon(address) {
     });
 }
 
-function updateThing() {
-    let address = "";
-    if (typeof window.ethereum.selectedAddress !== 'undefined') {
+function getCurrentAddress() {
+    let address = "0x" + "0".repeat(40);
+    if (typeof window.ethereum.selectedAddress !== "undefined" && window.ethereum.selectedAddress) {
 	address = window.ethereum.selectedAddress;
     }
-    let icon = getIdenticon(address);
-    let icon2 = getIdenticon(address);
-    document.getElementById("identicon").appendChild(icon);
-    document.getElementById("identiconSearch").appendChild(icon2);
+    return address;
+}
+
+function setCurrentAddressElements() {
+    let address = getCurrentAddress();
+    document.getElementById("currentAddress").innerHTML = address;
+    document.getElementById("identicon").appendChild(getIdenticon(address));
+    updateBalance(address);
 }

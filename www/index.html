@@ -38,8 +38,8 @@
                                 <div id="identicon" class="identicon">
                                 </div>
                                 <h2 class="name">illinoisfan.eth</h2>
-                                <h3 class="address">0x24f236D294662013b35Bf43576d0EBe7b1EBBDA3</h3>
-                                <h3 class="balance">Current Balance: <span class="value">0.0003 ETH</span></h3>
+                                <h3 id="currentAddress" class="address">0x0000000000000000000000000000000000000000</h3>
+                                <h3 class="balance">Current Balance: <span id="currentAddressBalance" class="value">0.0</span>&nbsp;ETH</h3>
                             </div>
                             <div class="abandon-block">
                                 <div class="status-wrapper">
@@ -75,8 +75,8 @@
 </body>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="./deployments/default.js"></script>
-    <script src="./index.js?v=4"></script>
+    <script src="./index.js?v=11"></script>
     <script>
-      updateThing();
+      setCurrentAddressElements();
     </script>
 </html>
