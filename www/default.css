@@ -105,7 +105,7 @@ html, body {
     width: 90%;
     max-width: 500px;
     background-color: #fff;
-    padding: 0 2em 20px 2em;
+    padding: 0 0 20px 0;
     margin: 2em 4vw 0 0;
     box-sizing: border-box;
     text-align: center;
@@ -113,10 +113,73 @@ html, body {
     box-shadow: 0 20px 40px -10px #0005;
 }
 
+.control-block {
+    background-color: #2d2d2d;
+    border-radius: 20px 20px 0 0;
+}
+
+.control-option {
+    width: 50%;
+    display: inline-block;
+    text-align: center;
+    padding: 0.5em 0;
+    border-radius: 20px 20px 0 0;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.control-option.selected {
+    background-color: #fff;
+    cursor: default;
+}
+
+.control-option .text {
+    display: inline-block;
+    color: #fff;
+    transition: all .25s;
+}
+
+.control-option.selected .text {
+    font-weight: 500;
+    color: #000;
+}
+
+.control-option:hover {
+    background-color: #000;
+}
+
+.control-option.selected:hover {
+    background-color: #fff;
+}
+
+.horizontal-tab-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.horizontal-tab-container {
+    width: 200%;
+    text-align: left;
+    transition: all .5s;
+}
+
+.tab-block {
+    text-align: center;
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+}
+
+.search-tab-block .search-box {
+    margin-bottom: 1.4em;
+}
+
 .account-block {
     padding-top: 2em;
     border-bottom: 2px solid #F1F1F1;
     padding-bottom: 2em;
+    margin: 0 2em;
 }
 
 .identicon-wrapper {
@@ -125,11 +188,13 @@ html, body {
 
 .identicon {
     width: 100%;
+    height: 6em;
+    transition: opacity .25s;
 }
 
 .identicon canvas {
-    width: 20% !important;
-    height: 20% !important;
+    width: 6em !important;
+    height: 6em !important;
     border-radius: 100%;
 }
 
@@ -137,6 +202,7 @@ html, body {
     padding: 0;
     margin: .5em 0 .25em 0;
     font-weight: 500;
+    transition: opacity .25s;
 }
 
 .address {
@@ -147,8 +213,23 @@ html, body {
     margin: 0;
 }
 
-.abandon-block {
+.balance {
+    font-weight: 100;
+    margin: 10px 0 0 0;
+}
 
+.not-found {
+    color: #f00;
+    opacity: 0;
+}
+
+.value {
+    font-weight: 700;
+}
+
+.abandon-block {
+    margin: 0 2em;
+    transition: opacity .25s;
 }
 
 .status-wrapper {
@@ -190,6 +271,43 @@ html, body {
 
 .warning {
     font-weight: 900;
+}
+
+.textbox {
+    padding: .5em 0 .5em 1.25em;
+    width: 80%;
+    border: 2px solid #efefef;
+    border-radius: .5em 0 0 .5em;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.textbox-button {
+    display: inline-block;
+    width: 20%;
+    background-color: #2d2d2d;
+    padding: .3em 0;
+    color: #fff;
+    border-radius: 0 .5em .5em 0;
+    cursor: pointer;
+    transition: all .25s;
+}
+
+.textbox-button:hover {
+    transform: translateY(-2px);
+    background-color: #000;
+    box-shadow: 0 4px 8px #0003;
+    border-radius: .5em;
+}
+
+.tab-block.hidden .identicon,
+.tab-block.hidden .name,
+.tab-block.hidden .abandon-block {
+    opacity: 0;
+}
+
+.tab-block.error .not-found {
+    opacity: 1;
 }
 
 .github-link {
