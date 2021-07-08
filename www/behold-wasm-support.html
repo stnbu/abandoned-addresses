@@ -12,9 +12,11 @@
     <p>If not, you might look at the browser's JavaScript console for errors. Not supporting <code>externref</code> is not a big deal. If you would like to work on this project, you only need install the latest Firefox browser to load and run the resulting WASM.</p>
     <hr />
     <script type="module">
-      import init from './res/abandoned_addresses.js';
+      import init, { do_wasm } from './res/abandoned_addresses.js';
       window.addEventListener('load', async () => {
 	  await init('./res/abandoned_addresses_bg.wasm');
+	  console.log("about to 'do_wasm()'");
+	  console.log(do_wasm());
       });
     </script>
   </body>
