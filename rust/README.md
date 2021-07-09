@@ -25,4 +25,4 @@ cargo build --target wasm32-unknown-unknown
 wasm-bindgen --out-dir ../www/res --target web --reference-types --no-typescript --omit-default-module-path target/wasm32-unknown-unknown/debug/abandoned_addresses.wasm
 ```
 
-Leaving the output from the above where it is, you should now be able to serve `./../www` and go to `/behold-wasm-support.html` to see if things are working.
+Leaving the output from the above where it is, you should now be able to serve `./../www` and go to `/behold-wasm-support.html` in your wasm-capable browser to see if things are working.
