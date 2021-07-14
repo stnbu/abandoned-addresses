@@ -117,6 +117,7 @@ function checkAddress() {
     transaction.call({from: window.ethereum.selectedAddress}, function (error, isAbandoned) {
 	if (!error) {
 	    let icon = getIdenticon(address);
+	    document.getElementById("identiconSearch").innerHTML = "";
 	    document.getElementById("identiconSearch").appendChild(icon);
 	    if(isAbandoned) {
 		searchTabBlock.classList.remove("hidden");
