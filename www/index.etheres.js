@@ -1,24 +1,17 @@
+// This is the test, "Do we have Metamask or not?"
 if (typeof window.ethereum === 'undefined') {
     alert("Using this site requires that you have a EIP1193-capable environment. " +
 	  "The easy fix: " +
 	  "Installing and setting up Metamask takes about 2 minutes. " +
 	  "Sorry. Install Metamask and reload this page for the full " +
 	  "expirience. See: https://metamask.io/");
+} else {
+    // if this is "null" we are definitely not connected in any sense.
+    console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
 }
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
-
-// if this is "null" we are definitely not connected in any sense.
-console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
-
-function logEvent(eventName, content, _error) {
-    let message = "[event fired: '" + eventName + "'] " + "content=" + JSON.stringify(content);
-    if (_error) {
-	message = message + ", error=" + JSON.stringify(_error);
-    }
-    console.log(message);
-}
 
 window.ethereum.on('accountsChanged', function(account) {
     // Note that switching addresses in this context always means switching from a connected address
@@ -35,7 +28,7 @@ window.ethereum.on('accountsChanged', function(account) {
 });
 
 window.ethereum.on('chainChanged', function(toChain) {
-    logEvent('chainChanged', toChain);
+    console.log("Chain changed to " + toChain);
     if (toChain === "0x4") {
 	console.log("Switched to Rinkeby");
     } else {
