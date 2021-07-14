@@ -91,6 +91,10 @@ async function getAccount() {
     });
 }
 
+// FIXME -- Hack! We still do not do metamask connecting correctly.
+// This makes life easier, but makes for a worse UI experience.
+getAccount();
+
 $("#enableEthereumButton").click(function() {
     getAccount();
 });
@@ -182,6 +186,7 @@ function getCurrentAddress() {
 function setCurrentAddressElements() {
     let address = getCurrentAddress();
     document.getElementById("currentAddress").innerHTML = address;
+    document.getElementById("identicon").innerHTML = "";
     document.getElementById("identicon").appendChild(getIdenticon(address));
     updateBalance(address);
 }
