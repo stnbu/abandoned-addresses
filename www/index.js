@@ -109,6 +109,8 @@ window.ethereum.on('chainChanged', function(toChain) {
   // Change the contract value, re-init ABANDONED_ADDRESSES and put up a conspicous banner if we are on a testnet
   // (maybe nothing if mainnet)
   //
+  // Update: It looks like this https://github.com/gnosis/safe-contracts/blob/186a21a74b327f17fc41217a927dea7064f74604/contracts/GnosisSafe.sol#L36 might have the same goal.
+  //
   // Also, using the same info (contract address) we could have a link to the correct etherscan page for the contract.
   // Note that when you e.g. load the page 'connect' with chainId is fired. When you witch chains, this is fired. They
   // are different events.
