@@ -43,14 +43,37 @@ window.ethereum.on('message', function(content) {
     console.log("Helloo. When does this fire?! Get ride of this _lore_ if we never figure out what/what/if `message` events do/are for/actually work");
 });
 
+var signerContract;
+var providerContract;
+
 async function getAccount() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-	const provider = new ethers.providers.Web3Provider(window.ethereum);
-	const signer = provider.getSigner();
-	console.log("we succesfully connected to *A* wallet. the data we got was `" + JSON.stringify(accounts) + "`");
+        console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+        providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+        console.log("Sucessfuly created global signing contract.");
     });
 }
 
 $("#enableEthereumButton").click(function() {
     getAccount();
+});
+
+$("#getIsAbandoned").click(function() {
+    let address = $("#isAbandoned").val();
+    // Note that a `Error: call revert exception` here _can_ mean that you are on the wrong network.
+    providerContract.isAbandoned(address).then(
+        isAbandoned => {
+            if (isAbandoned) {
+                console.log(address + " IS abandoned");
+            } else {
+                console.log(address + " IS NOT abandoned");
+            }
+        },
+        err => {
+	    console.log("Failed to check abandonement status: " + err);
+        }
+    );
 });
