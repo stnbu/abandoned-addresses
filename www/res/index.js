@@ -54,12 +54,6 @@ function chainIdAlert() {
     throw new Error("Not on Rinkeby!");
 }
 
-function assertRinkeby() {
-    if (window.ethereum.chainId !== "0x4") {
-        chainIdAlert();
-    }
-}
-
 // This is the test, "Do we have Metamask or not?"
 if (typeof window.ethereum === 'undefined') {
     alert("Using this site requires that you have a EIP1193-capable environment. " +
@@ -75,7 +69,7 @@ if (typeof window.ethereum === 'undefined') {
         // At this point, hail mary and try to get connected.
         window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
             console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
-            handleSelectedAddressChange();
+            updateSelectedAddressElements();
         }).then(
             _ => {},
             err => {
@@ -85,7 +79,7 @@ if (typeof window.ethereum === 'undefined') {
     }
 }
 
-function handleSelectedAddressChange() {
+function updateSelectedAddressElements() {
     let address = window.ethereum.selectedAddress;
     provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -143,7 +137,7 @@ window.ethereum.on('accountsChanged', function(account) {
                 "Metamask UI]. And more confusion: Switching accounts in Metamask " +
                 "does not always switch the address here!");
     console.log("Note that `window.ethereum.selectedAddress` now has value " + window.ethereum.selectedAddress);
-    handleSelectedAddressChange();
+    updateSelectedAddressElements();
 });
 
 window.ethereum.on('chainChanged', function(toChain) {
@@ -211,7 +205,6 @@ $("#checkAddress").click(function() {
 });
 
 $("#abandonAddress").click(function() {
-    assertRinkeby();
     // TODO: We need to deploy a version without taking an address as an argument. Isn't it pointless?
     let address = window.ethereum.selectedAddress;
     signerContract.abandonAddress(address).then(
@@ -224,6 +217,8 @@ $("#abandonAddress").click(function() {
                     // HERE --> Enable "confirmed!" UI element.
                     console.log(`Received ${n} confirmations for abandonment of address ${address}.\n` +
                                 `https://rinkeby.etherscan.io/tx/${response.transactionHash}`);
+		    // We have one confirmation. Does this mean that we might "miss" the newly changed abandoned status?
+		    updateSelectedAddressElements();
                 },
                 err => {
                     alert(`While awaiting ${n} confirmations for abandonment of address ${address}: ${JSON.stringify(err)}`);
