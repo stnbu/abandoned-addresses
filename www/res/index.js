@@ -1,3 +1,5 @@
+/* ethers.js code to interact with the abandoned-addresses contract */
+
 var signerContract;
 var providerContract;
 
@@ -7,7 +9,7 @@ if (typeof window.ethereum === 'undefined') {
           "The easy fix: " +
           "Installing and setting up Metamask takes about 2 minutes. " +
           "Sorry. Install Metamask and reload this page for the full " +
-          "expirience. See: https://metamask.io/");
+          "experience. See: https://metamask.io/");
 } else {
     // At this point, hail mary and try to get connected.
     window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
@@ -15,9 +17,9 @@ if (typeof window.ethereum === 'undefined') {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-        console.log("Sucessfuly created global signing contract.");
+        console.log("Successfully created global signing contract.");
         providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-        console.log("Sucessfuly created global provider contract.");
+        console.log("Successfully created global provider contract.");
     }).then(
         _ => {},
         err => {
@@ -53,11 +55,6 @@ window.ethereum.on('chainChanged', function(toChain) {
     }
 });
 
-window.ethereum.on('message', function(content) {
-    console.log("Helloo. When does this fire?! Get ride of this _lore_ if we never figure out what/what/if `message` events do/are for/actually work");
-});
-
-
 $("#getIsAbandoned").click(function() {
     let address = $("#isAbandoned").val();
     // Note that a `Error: call revert exception` here _can_ mean that you are on the wrong network.
@@ -70,7 +67,7 @@ $("#getIsAbandoned").click(function() {
             }
         },
         err => {
-            console.log("Failed to check abandonement status: " + err);
+            console.log("Failed to check abandonment status: " + err);
         }
     );
 });
