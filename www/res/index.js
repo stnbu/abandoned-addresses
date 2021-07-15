@@ -1,7 +1,21 @@
 /* ethers.js code to interact with the abandoned-addresses contract */
 
+// The only real globals.
 var signerContract;
 var providerContract;
+
+function chainIdAlert() {
+    alert("Sorry. Only the Rinkeby test network is supported. " +
+          "Feel free to file an issue on the abandoned-addresses " +
+          "Github, or email me at mb@unintuitive.org and I will " +
+          "happily send you plenty of rETH ");
+}
+
+function assertRinkeby() {
+    if (window.ethereum.chainId !== "0x4") {
+	chainIdAlert();
+    }
+}
 
 // This is the test, "Do we have Metamask or not?"
 if (typeof window.ethereum === 'undefined') {
@@ -11,21 +25,25 @@ if (typeof window.ethereum === 'undefined') {
           "Sorry. Install Metamask and reload this page for the full " +
           "experience. See: https://metamask.io/");
 } else {
-    // At this point, hail mary and try to get connected.
-    window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-        console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-        console.log("Successfully created global signing contract.");
-        providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-        console.log("Successfully created global provider contract.");
-    }).then(
-        _ => {},
-        err => {
-            alert(`While trying to connect your wallet to this site: ${err}`);
-        }
-    );
+    if (window.ethereum.chainId !== "0x4") {
+	chainIdAlert();
+    } else {
+	// At this point, hail mary and try to get connected.
+	window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+            console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+            console.log("Successfully created global signing contract.");
+            providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+            console.log("Successfully created global provider contract.");
+	}).then(
+            _ => {},
+            err => {
+		alert(`While trying to connect your wallet to this site: ${err}`);
+            }
+	);
+    }
 }
 
 window.ethereum.on('accountsChanged', function(account) {
@@ -48,14 +66,12 @@ window.ethereum.on('chainChanged', function(toChain) {
     if (toChain === "0x4") {
         console.log("Switched to Rinkeby");
     } else {
-        alert("Sorry. Only the Rinkeby test network is supported. " +
-              "Feel free to file an issue on the abandoned-addresses " +
-              "Github, or email me at mb@unintuitive.org and I will " +
-              "happily send you plenty of rETH ");
+	chainIdAlert();
     }
 });
 
 $("#getIsAbandoned").click(function() {
+    assertRinkeby();
     let address = $("#isAbandoned").val();
     // Note that a `Error: call revert exception` here _can_ mean that you are on the wrong network.
     providerContract.isAbandoned(address).then(
@@ -73,6 +89,7 @@ $("#getIsAbandoned").click(function() {
 });
 
 $("#abandonAddress").click(function() {
+    assertRinkeby();
     let address = $("#abandonedAddress").val();
     signerContract.abandonAddress(address).then(
         transactionResponse => {
