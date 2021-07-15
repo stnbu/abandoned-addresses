@@ -1,5 +1,16 @@
 /* ethers.js code to interact with the abandoned-addresses contract */
 
+import { createIcon } from "https://cdn.jsdelivr.net/npm/@download/blockies@1.0.3/src/blockies.mjs";
+
+// Mimics how MetaMask generates "identicons"
+function getIdenticon(address, useBlockie = true) {
+    if (useBlockie) {
+        return createIcon({seed: address.toLowerCase()});
+    } else {
+        throw new Error("Can only do Blockie!");
+    }
+}
+
 // The only real globals.
 var signerContract;
 var providerContract;
@@ -9,11 +20,12 @@ function chainIdAlert() {
           "Feel free to file an issue on the abandoned-addresses " +
           "Github, or email me at mb@unintuitive.org and I will " +
           "happily send you plenty of rETH ");
+    throw new Error("Not on Rinkeby!");
 }
 
 function assertRinkeby() {
     if (window.ethereum.chainId !== "0x4") {
-	chainIdAlert();
+        chainIdAlert();
     }
 }
 
@@ -24,12 +36,13 @@ if (typeof window.ethereum === 'undefined') {
           "Installing and setting up Metamask takes about 2 minutes. " +
           "Sorry. Install Metamask and reload this page for the full " +
           "experience. See: https://metamask.io/");
+    throw new Error("No Ethereum support!");
 } else {
     if (window.ethereum.chainId !== "0x4") {
-	chainIdAlert();
+        chainIdAlert();
     } else {
-	// At this point, hail mary and try to get connected.
-	window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+        // At this point, hail mary and try to get connected.
+        window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
             console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
@@ -37,12 +50,12 @@ if (typeof window.ethereum === 'undefined') {
             console.log("Successfully created global signing contract.");
             providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
             console.log("Successfully created global provider contract.");
-	}).then(
+        }).then(
             _ => {},
             err => {
-		alert(`While trying to connect your wallet to this site: ${err}`);
+                alert(`While trying to connect your wallet to this site: ${err}`);
             }
-	);
+        );
     }
 }
 
@@ -66,7 +79,7 @@ window.ethereum.on('chainChanged', function(toChain) {
     if (toChain === "0x4") {
         console.log("Switched to Rinkeby");
     } else {
-	chainIdAlert();
+        chainIdAlert();
     }
 });
 
@@ -91,6 +104,7 @@ $("#getIsAbandoned").click(function() {
 $("#abandonAddress").click(function() {
     assertRinkeby();
     let address = $("#abandonedAddress").val();
+    let icon = getIdenticon(address);
     signerContract.abandonAddress(address).then(
         transactionResponse => {
             // HERE --> Enable "confirming..." UI element.
@@ -108,7 +122,7 @@ $("#abandonAddress").click(function() {
             );
         },
         err => {
-            alert("Failed to abandon address `" + address + "`: " + err);
+            alert("Failed to abandon address `" + address + "`: " + JSON.stringify(err));
         }
     );
 });
