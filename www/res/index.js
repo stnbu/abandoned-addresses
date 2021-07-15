@@ -120,6 +120,14 @@ function handleSelectedAddressChange() {
 	    $('.current-address-abandoned').hide();
 	},
     );
+    provider.lookupAddress(address).then(
+	result => {
+	    $("#currentAddressENSName").html(result || "&nbsp");
+	},
+	err => {
+	    alert(`While looking up ENS name for ${address}: ${JSON.stringify(err)}`);
+	},
+    );
 }
 
 window.ethereum.on('accountsChanged', function(account) {
@@ -190,6 +198,14 @@ $("#checkAddress").click(function() {
 	() => {
 	    $('.search-result-active').show();
 	    $('.search-result-abandoned').hide();
+	},
+    );
+    provider.lookupAddress(address).then(
+	result => {
+	    $("#searchAddressENSName").html(result || "&nbsp");
+	},
+	err => {
+	    alert(`While looking up ENS name for ${address}: ${JSON.stringify(err)}`);
 	},
     );
 });
