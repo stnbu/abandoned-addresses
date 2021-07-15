@@ -53,7 +53,7 @@ if (typeof window.ethereum === 'undefined') {
         }).then(
             _ => {},
             err => {
-                alert(`While trying to connect your wallet to this site: ${err}`);
+                alert(`While trying to connect your wallet to this site: ${JSON.stringify(err)}`);
             }
         );
     }
@@ -96,7 +96,7 @@ $("#getIsAbandoned").click(function() {
             }
         },
         err => {
-            console.log("Failed to check abandonment status: " + err);
+            console.log("Failed to check abandonment status: " + JSON.stringify(err));
         }
     );
 });
@@ -117,7 +117,7 @@ $("#abandonAddress").click(function() {
                                 `https://rinkeby.etherscan.io/tx/${response.transactionHash}`);
                 },
                 err => {
-                    alert(`While awaiting ${n} confirmations for abandonment of address ${address}`);
+                    alert(`While awaiting ${n} confirmations for abandonment of address ${address}: ${JSON.stringify(err)}`);
                 }
             );
         },
