@@ -42,7 +42,8 @@
                             </div>
                             <div class="abandon-block">
                                 <div class="status-wrapper">
-                                    <h2 class="status">Your address is currently active.</h2><div class="status-icon active"></div>
+				    <h2 class="status current-address-active">Your address is currently active.</h2><div class="status-icon current-address-active active"></div>
+				    <h2 class="status current-address-abandoned">Your address has been abandoned.</h2><div class="status-icon current-address-abandoned abandoned"></div>
                                 </div>
                                 <div id="abandonAddress" class="standard-button orange-button">Abandon Address</div>
                                 <div class="warning-label"><span class="warning">WARNING:</span> Abandoning your address is permanent and cannot be undone.</div>
@@ -55,11 +56,12 @@
                                 <div class="search-box">
                                     <input id="addressSearch" class="textbox" type="text" class="address" placeholder="Enter an Ethereum Address" value=""/><div class="textbox-button" id="checkAddress">Check</div>
                                 </div>
-                                <h3 class="balance not-found">Address not found</h3>
+                                <h3 class="balance">Current Balance: <span id="searchAddressBalance" class="value">0.0</span>&nbsp;ETH</h3>
                             </div>
                             <div class="abandon-block">
                                 <div class="status-wrapper">
-                                    <h2 class="status">This address is currently active.</h2><div class="status-icon active"></div>
+                                    <h2 class="status search-result-active">This address is currently active.</h2><div class="status-icon search-result-active active"></div>
+                                    <h2 class="status search-result-abandoned">This address has been abandoned.</h2><div class="status-icon search-result-abandoned abandoned"></div>
                                 </div>
                             </div>
                         </div>

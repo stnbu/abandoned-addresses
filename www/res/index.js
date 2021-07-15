@@ -15,6 +15,8 @@
   * Adam Soper <adam@americanretailusa.com>
   */
 
+// TODO: ENS -- provider.lookupAddress("0x5555763613a12D8F3e73be831DFf8598089d3dCa");
+
 // globals
 var provider;
 var signerContract;
@@ -23,6 +25,11 @@ var curTab = 0; // 0 = My Address, 1 = Search
 var tabContainer = document.getElementsByClassName("horizontal-tab-container")[0];
 var tabs = document.getElementsByClassName("control-option");
 var searchTabBlock = document.getElementsByClassName("search-tab-block")[0];
+
+$('.current-address-active').hide();
+$('.current-address-abandoned').hide();
+$('.search-result-active').hide();
+$('.search-result-abandoned').hide();
 
 import { createIcon } from "https://cdn.jsdelivr.net/npm/@download/blockies@1.0.3/src/blockies.mjs";
 
@@ -92,7 +99,27 @@ function handleSelectedAddressChange() {
     console.log(`Updating displayed current address for ${JSON.stringify(address)}.`);
     $("#currentAddress").text(address);
     console.log(`Updating balance for ${JSON.stringify(address)}.`);
-    updateBalance(address);
+    provider.getBalance(address).then(
+        balance => {
+            // FIXME: BigNumber.div does not work! We should use it.
+            let etherBalance = (balance / ethers.constants.WeiPerEther).toFixed(3);
+            $("#currentAddressBalance").html(etherBalance);
+        },
+        err => {
+            throw err;
+        }
+    );
+    doIsAbandoned(
+	address,
+	() => {
+	    $('.current-address-active').hide();
+	    $('.current-address-abandoned').show();
+	},
+	() => {
+	    $('.current-address-active').show();
+	    $('.current-address-abandoned').hide();
+	},
+    );
 }
 
 window.ethereum.on('accountsChanged', function(account) {
@@ -120,28 +147,50 @@ window.ethereum.on('chainChanged', function(toChain) {
     }
 });
 
-$("#checkAddress").click(function() {
-    assertRinkeby();
-    let address = $("#addressSearch").val();
-    // Note that a `Error: call revert exception` here _can_ mean that you are on the wrong network.
+
+function doIsAbandoned(address, isAbandonedCallback, notAbandonedCallback) {
     providerContract.isAbandoned(address).then(
         isAbandoned => {
-            let icon = getIdenticon(address);
-            document.getElementById("identiconSearch").innerHTML = "";
-            document.getElementById("identiconSearch").appendChild(icon);
             if(isAbandoned) {
-                console.log(address + " IS abandoned");
-                searchTabBlock.classList.remove("hidden");
-                searchTabBlock.classList.remove("error");
+		console.log(address + " IS abandoned");
+		isAbandonedCallback();
             } else {
-                console.log(address + " IS NOT abandoned");
-                searchTabBlock.classList.add("hidden");
-                searchTabBlock.classList.add("error");
+		console.log(address + " IS NOT abandoned");
+		notAbandonedCallback();
             }
         },
         err => {
             alert(`Failed to check abandonment status: ${JSON.stringify(err)}`);
         }
+    );
+}
+
+$("#checkAddress").click(function() {
+    let address = $("#addressSearch").val();
+    let icon = getIdenticon(address);
+    document.getElementById("identiconSearch").innerHTML = "";
+    document.getElementById("identiconSearch").appendChild(icon);
+    provider.getBalance(address).then(
+        balance => {
+            let etherBalance = (balance / ethers.constants.WeiPerEther).toFixed(3);
+            $("#searchAddressBalance").html(etherBalance);
+        },
+        err => {
+            throw err;
+        }
+    );
+    searchTabBlock.classList.remove("hidden");
+    searchTabBlock.classList.remove("error");
+    doIsAbandoned(
+	address,
+	() => {
+	    $('.search-result-active').hide();
+	    $('.search-result-abandoned').show();
+	},
+	() => {
+	    $('.search-result-active').show();
+	    $('.search-result-abandoned').hide();
+	},
     );
 });
 
@@ -170,66 +219,6 @@ $("#abandonAddress").click(function() {
         }
     );
 });
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-function updateBalance(address) {
-    provider.getBalance(address).then(
-        balance => {
-            // FIXME: BigNumber.div does not work! We should use it.
-            let etherBalance = (balance / ethers.constants.WeiPerEther).toFixed(3);
-            $("#currentAddressBalance").html(etherBalance);
-        },
-        err => {
-            throw err;
-        }
-    );
-}
-
-//     web3.eth.getBalance(address, function(err, result) {
-//      if (err) {
-//          alert(err);
-//      } else {
-//          let ether_balance = web3.utils.fromWei(result, "ether")
-//          let balance = (Math.round(ether_balance * 100) / 100).toFixed(3);
-//          document.getElementById("currentAddressBalance").innerHTML = balance;
-//      }
-//     });
-// }
-
-function checkAddress() {
-    let address = $("#addressSearch").val();
-    transaction = ABANDONED_ADDRESSES.methods.isAbandoned(address);
-    transaction.call({from: window.ethereum.selectedAddress}, function (error, isAbandoned) {
-        if (!error) {
-        } else {
-            alert("error while checking abandoned status: " + error);
-        }
-    });
-}
-//$("#checkAddress").click(checkAddress);
-
-$("#abandonAddress").click(function() {
-    transaction = ABANDONED_ADDRESSES.methods.abandonAddress(window.ethereum.selectedAddress);
-    transaction.send({from: window.ethereum.selectedAddress})
-        .on('transactionHash', function(hash){
-            logEvent('transactionHash', hash);
-        })
-        .on('confirmation', function(confirmationNumber, receipt) {
-            // NOTE: we abuse error= field for confirmation number
-            logEvent('confirmation', receipt, "(conf_num=" + confirmationNumber + "[not_an_error])");
-        })
-        .on('receipt', function(receipt){
-            logEvent('receipt', receipt);
-        })
-        .on('error', function(error, receipt) {
-            logEvent('error', receipt, error);
-        })
-        .finally(function() {
-            // finally do this always
-        });
-});
 
 function switchTab(elem) {
     if(curTab === 0) {
@@ -245,18 +234,3 @@ function switchTab(elem) {
     }
 }
 $(".tab-switcher").click(switchTab);
-
-function getCurrentAddress() {
-    let address = "0x" + "0".repeat(40);
-    if (typeof window.ethereum.selectedAddress !== "undefined" && window.ethereum.selectedAddress) {
-        address = window.ethereum.selectedAddress;
-    }
-    return address;
-}
-
-function setCurrentAddressElements() {
-    let address = getCurrentAddress();
-    document.getElementById("currentAddress").innerHTML = address;
-    document.getElementById("identicon").innerHTML = "";
-    document.getElementById("identicon").appendChild(getIdenticon(address));
-}
