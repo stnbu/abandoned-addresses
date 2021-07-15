@@ -43,13 +43,8 @@ if (typeof window.ethereum === 'undefined') {
     } else {
         // At this point, hail mary and try to get connected.
         window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-            console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-            console.log("Successfully created global signing contract.");
-            providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-            console.log("Successfully created global provider contract.");
+	    console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
+	    handleSelectedAddressChange();
         }).then(
             _ => {},
             err => {
@@ -57,6 +52,20 @@ if (typeof window.ethereum === 'undefined') {
             }
         );
     }
+}
+
+function handleSelectedAddressChange() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+    console.log("Successfully created global signing contract.");
+    providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+    console.log("Successfully created global provider contract.");
+    let identicon = getIdenticon(window.ethereum.selectedAddress);
+    console.log(`Updating identicon for ${JSON.stringify(window.ethereum.selectedAddress)}.`);
+    $("#abandonedIdenticon").html(identicon);
+    console.log(`Updating displayed current address for ${JSON.stringify(window.ethereum.selectedAddress)}.`);
+    $("#abandonedAddress").text(window.ethereum.selectedAddress);
 }
 
 window.ethereum.on('accountsChanged', function(account) {
@@ -72,6 +81,7 @@ window.ethereum.on('accountsChanged', function(account) {
                 "Metamask UI]. And more confusion: Switching accounts in Metamask " +
                 "does not always switch the address here!");
     console.log("Note that `window.ethereum.selectedAddress` now has value " + window.ethereum.selectedAddress);
+    handleSelectedAddressChange();
 });
 
 window.ethereum.on('chainChanged', function(toChain) {
@@ -103,9 +113,8 @@ $("#getIsAbandoned").click(function() {
 
 $("#abandonAddress").click(function() {
     assertRinkeby();
-    let address = $("#abandonedAddress").val();
-    let icon = getIdenticon(address);
-    signerContract.abandonAddress(address).then(
+    // TODO: We need to deploy a version without taking an address as an argument. Isn't it pointless?
+    signerContract.abandonAddress(window.ethereum.selectedAddress).then(
         transactionResponse => {
             // HERE --> Enable "confirming..." UI element.
             console.log("Successfully sent transaction to abandon `" + address + "`");
