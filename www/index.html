@@ -24,9 +24,9 @@
         <div class="content-container">
             <div class="form-container">
                 <div class="control-block">
-                    <div class="control-option selected" onclick="switchTab(this)">
+                    <div class="control-option selected tab-switcher">
                         <div class="text">My Address</div>
-                    </div><div class="control-option" onclick="switchTab(this)">
+                    </div><div class="control-option tab-switcher">
                         <div class="text">Search</div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                                 </div>
                                 <h2 class="name">illinoisfan.eth</h2>
                                 <div class="search-box">
-                                    <input id="addressSearch" class="textbox" type="text" class="address" placeholder="Enter an Ethereum Address" value=""/><div class="textbox-button" onclick="checkAddress()">Check</div>
+                                    <input id="addressSearch" class="textbox" type="text" class="address" placeholder="Enter an Ethereum Address" value=""/><div class="textbox-button" id="checkAddress">Check</div>
                                 </div>
                                 <h3 class="balance not-found">Address not found</h3>
                             </div>
