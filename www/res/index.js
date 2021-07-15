@@ -114,10 +114,11 @@ $("#getIsAbandoned").click(function() {
 $("#abandonAddress").click(function() {
     assertRinkeby();
     // TODO: We need to deploy a version without taking an address as an argument. Isn't it pointless?
-    signerContract.abandonAddress(window.ethereum.selectedAddress).then(
+    let address = window.ethereum.selectedAddress;
+    signerContract.abandonAddress(address).then(
         transactionResponse => {
             // HERE --> Enable "confirming..." UI element.
-            console.log("Successfully sent transaction to abandon `" + address + "`");
+            console.log(`Successfully sent transaction to abandon ${JSON.stringify(address)}`);
             let n = 1;
             transactionResponse.wait(n).then(
                 response => {
