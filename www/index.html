@@ -3,7 +3,6 @@
 <head>
  <title>ABANDONEDADDRESSES | Permanently abandon your Ethereum address</title>
  <link href="default.css" rel="stylesheet" title="Default Style">
- <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
  <meta name="description" content="Proof-of-Concept Ethereum Address Abandonment Protocol">
  <meta name="keywords" content="ethereum, contract, protocol">
  <meta name="author" content="Adam Soper <adam@americanretailusa.com>">
@@ -73,10 +72,10 @@
         </div>
     </div>
 </body>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script src="./deployments/default.js"></script>
-    <script src="./index.js?v=14"></script>
-    <script>
-      setCurrentAddressElements();
-    </script>
+<!-- cdn, for now -->
+<script src="https://code.jquery.com/jquery-latest.min.js" type="application/javascript"></script>
+<script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js" type="application/javascript"></script>
+<!-- our stuff -->
+<script src="./deployments/default.js" type="application/javascript"></script>
+<script type="module" src="./res/index.js"></script>
 </html>
