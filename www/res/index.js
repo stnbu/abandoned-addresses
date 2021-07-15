@@ -4,6 +4,7 @@ import { createIcon } from "https://cdn.jsdelivr.net/npm/@download/blockies@1.0.
 
 // Mimics how MetaMask generates "identicons"
 function getIdenticon(address, useBlockie = true) {
+    // Looks like ens has maybe a third type.. https://app.ens.domains/address/0xF553F9f0aFaA8435DA9846265c9F4782DCbC33c6 ?
     if (useBlockie) {
         return createIcon({seed: address.toLowerCase()});
     } else {
