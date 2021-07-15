@@ -1,5 +1,17 @@
 /* ethers.js code to interact with the abandoned-addresses contract */
 
+import { createIcon } from "https://cdn.jsdelivr.net/npm/@download/blockies@1.0.3/src/blockies.mjs";
+
+// Mimics how MetaMask generates "identicons"
+function getIdenticon(address, useBlockie = true) {
+    // Looks like ens has maybe a third type.. https://app.ens.domains/address/0xF553F9f0aFaA8435DA9846265c9F4782DCbC33c6 ?
+    if (useBlockie) {
+        return createIcon({seed: address.toLowerCase()});
+    } else {
+        throw new Error("Can only do Blockie!");
+    }
+}
+
 // The only real globals.
 var signerContract;
 var providerContract;
@@ -9,11 +21,12 @@ function chainIdAlert() {
           "Feel free to file an issue on the abandoned-addresses " +
           "Github, or email me at mb@unintuitive.org and I will " +
           "happily send you plenty of rETH ");
+    throw new Error("Not on Rinkeby!");
 }
 
 function assertRinkeby() {
     if (window.ethereum.chainId !== "0x4") {
-	chainIdAlert();
+        chainIdAlert();
     }
 }
 
@@ -24,26 +37,36 @@ if (typeof window.ethereum === 'undefined') {
           "Installing and setting up Metamask takes about 2 minutes. " +
           "Sorry. Install Metamask and reload this page for the full " +
           "experience. See: https://metamask.io/");
+    throw new Error("No Ethereum support!");
 } else {
     if (window.ethereum.chainId !== "0x4") {
-	chainIdAlert();
+        chainIdAlert();
     } else {
-	// At this point, hail mary and try to get connected.
-	window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-            console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-            console.log("Successfully created global signing contract.");
-            providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-            console.log("Successfully created global provider contract.");
-	}).then(
+        // At this point, hail mary and try to get connected.
+        window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+	    console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
+	    handleSelectedAddressChange();
+        }).then(
             _ => {},
             err => {
-		alert(`While trying to connect your wallet to this site: ${err}`);
+                alert(`While trying to connect your wallet to this site: ${JSON.stringify(err)}`);
             }
-	);
+        );
     }
+}
+
+function handleSelectedAddressChange() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+    console.log("Successfully created global signing contract.");
+    providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+    console.log("Successfully created global provider contract.");
+    let identicon = getIdenticon(window.ethereum.selectedAddress);
+    console.log(`Updating identicon for ${JSON.stringify(window.ethereum.selectedAddress)}.`);
+    $("#abandonedIdenticon").html(identicon);
+    console.log(`Updating displayed current address for ${JSON.stringify(window.ethereum.selectedAddress)}.`);
+    $("#abandonedAddress").text(window.ethereum.selectedAddress);
 }
 
 window.ethereum.on('accountsChanged', function(account) {
@@ -59,6 +82,7 @@ window.ethereum.on('accountsChanged', function(account) {
                 "Metamask UI]. And more confusion: Switching accounts in Metamask " +
                 "does not always switch the address here!");
     console.log("Note that `window.ethereum.selectedAddress` now has value " + window.ethereum.selectedAddress);
+    handleSelectedAddressChange();
 });
 
 window.ethereum.on('chainChanged', function(toChain) {
@@ -66,7 +90,7 @@ window.ethereum.on('chainChanged', function(toChain) {
     if (toChain === "0x4") {
         console.log("Switched to Rinkeby");
     } else {
-	chainIdAlert();
+        chainIdAlert();
     }
 });
 
@@ -83,18 +107,19 @@ $("#getIsAbandoned").click(function() {
             }
         },
         err => {
-            console.log("Failed to check abandonment status: " + err);
+            console.log("Failed to check abandonment status: " + JSON.stringify(err));
         }
     );
 });
 
 $("#abandonAddress").click(function() {
     assertRinkeby();
-    let address = $("#abandonedAddress").val();
+    // TODO: We need to deploy a version without taking an address as an argument. Isn't it pointless?
+    let address = window.ethereum.selectedAddress;
     signerContract.abandonAddress(address).then(
         transactionResponse => {
             // HERE --> Enable "confirming..." UI element.
-            console.log("Successfully sent transaction to abandon `" + address + "`");
+            console.log(`Successfully sent transaction to abandon ${JSON.stringify(address)}`);
             let n = 1;
             transactionResponse.wait(n).then(
                 response => {
@@ -103,12 +128,12 @@ $("#abandonAddress").click(function() {
                                 `https://rinkeby.etherscan.io/tx/${response.transactionHash}`);
                 },
                 err => {
-                    alert(`While awaiting ${n} confirmations for abandonment of address ${address}`);
+                    alert(`While awaiting ${n} confirmations for abandonment of address ${address}: ${JSON.stringify(err)}`);
                 }
             );
         },
         err => {
-            alert("Failed to abandon address `" + address + "`: " + err);
+            alert("Failed to abandon address `" + address + "`: " + JSON.stringify(err));
         }
     );
 });
