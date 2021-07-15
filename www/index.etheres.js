@@ -1,3 +1,6 @@
+var signerContract;
+var providerContract;
+
 // This is the test, "Do we have Metamask or not?"
 if (typeof window.ethereum === 'undefined') {
     alert("Using this site requires that you have a EIP1193-capable environment. " +
@@ -6,12 +9,22 @@ if (typeof window.ethereum === 'undefined') {
           "Sorry. Install Metamask and reload this page for the full " +
           "expirience. See: https://metamask.io/");
 } else {
-    // if this is "null" we are definitely not connected in any sense.
-    console.log("selectedAddress we are using upon loading: " + window.ethereum.selectedAddress);
+    // At this point, hail mary and try to get connected.
+    window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
+        console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+        console.log("Sucessfuly created global signing contract.");
+        providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+        console.log("Sucessfuly created global provider contract.");
+    }).then(
+        _ => {},
+        err => {
+            alert(`While trying to connect your wallet to this site: ${err}`);
+        }
+    );
 }
-
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
 
 window.ethereum.on('accountsChanged', function(account) {
     // Note that switching addresses in this context always means switching from a connected address
@@ -24,7 +37,7 @@ window.ethereum.on('accountsChanged', function(account) {
                 "then the switched-to address above is _not_ the active Metamask " +
                 "address [i.e. the one the user sees the identicon for in the " +
                 "Metamask UI]. And more confusion: Switching accounts in Metamask " +
-		"does not always switch the address here!");
+                "does not always switch the address here!");
     console.log("Note that `window.ethereum.selectedAddress` now has value " + window.ethereum.selectedAddress);
 });
 
@@ -44,24 +57,6 @@ window.ethereum.on('message', function(content) {
     console.log("Helloo. When does this fire?! Get ride of this _lore_ if we never figure out what/what/if `message` events do/are for/actually work");
 });
 
-var signerContract;
-var providerContract;
-
-async function getAccount() {
-    window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => {
-        console.log("Running `eth_requestAccounts` callback on wallet address " + JSON.stringify(accounts));
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        signerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-        console.log("Sucessfuly created global signing contract.");
-        providerContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-        console.log("Sucessfuly created global provider contract.");
-    });
-}
-
-$("#enableEthereumButton").click(function() {
-    getAccount();
-});
 
 $("#getIsAbandoned").click(function() {
     let address = $("#isAbandoned").val();
@@ -75,7 +70,31 @@ $("#getIsAbandoned").click(function() {
             }
         },
         err => {
-	    console.log("Failed to check abandonement status: " + err);
+            console.log("Failed to check abandonement status: " + err);
+        }
+    );
+});
+
+$("#abandonAddress").click(function() {
+    let address = $("#abandonedAddress").val();
+    signerContract.abandonAddress(address).then(
+        transactionResponse => {
+            // HERE --> Enable "confirming..." UI element.
+            console.log("Successfully sent transaction to abandon `" + address + "`");
+            let n = 1;
+            transactionResponse.wait(n).then(
+                response => {
+                    // HERE --> Enable "confirmed!" UI element.
+                    console.log(`Received ${n} confirmations for abandonment of address ${address}.\n` +
+                                `https://rinkeby.etherscan.io/tx/${response.transactionHash}`);
+                },
+                err => {
+                    alert(`While awaiting ${n} confirmations for abandonment of address ${address}`);
+                }
+            );
+        },
+        err => {
+            alert("Failed to abandon address `" + address + "`: " + err);
         }
     );
 });
