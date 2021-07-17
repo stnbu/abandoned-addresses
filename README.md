@@ -1,7 +1,5 @@
 The PoC is here: https://dapps.unintuitive.org/abandoned-addresses/
 
-> :warning: This might be completely obiviated by [EIP161](https://eips.ethereum.org/EIPS/eip-161) . . .
-
 # The Idea...
 
 Imagine finding yourself in one of the following situations:
