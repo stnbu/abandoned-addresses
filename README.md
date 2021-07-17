@@ -36,6 +36,8 @@ That is the idea behind this contract. There should be an agreed-upon, standard 
 
 # The Web UI
 
+A live demo is hosted [here](https://dapps.unintuitive.org/abandoned-addresses/).
+
 You must have a "web3 capable" browser environment. This most often means installing the [Metamask browser extension](https://metamask.io/). Once installed, with a wallet set up, and with the `Rinkeby` network selected, you should be able to reload the page and immedately get prompted by Metamask to connect.
 
 Once connected, you should see your addresses "blockie" identicon and ENS name (if applicable). You can then do a couple of things:
