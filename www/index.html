@@ -1,37 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Permanently Abandon your Ethereum Address</title>
- <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+ <title>ABANDONEDADDRESSES | Permanently abandon your Ethereum address</title>
+ <link href="default.css" rel="stylesheet" title="Default Style">
+ <meta name="description" content="Proof-of-Concept Ethereum Address Abandonment Protocol">
+ <meta name="keywords" content="ethereum, contract, protocol">
+ <meta name="author" content="Adam Soper <adam@americanretailusa.com>">
 </head>
-<body class="container">
-  <h1>Hi! I am <a href="https://github.com/stnbu/abandoned-addresses">AbandonedAddresses!</a>, a simple PoC contract that proposes a standard way to "abandon" an Ethereum address.</h1>
-  <h1>Use this Form to Permanently Abandon your Ethereum Address</h1>
-  <h2>[HINT: open Chrome dev tools (or equivalent) and watch the console!]</h2>
-
-  <hr />
-
-  <h3>Use this to check if an address has been abandoned:</h3>
-
-  <form>
-    <label for="getIsAbandoned">Check if Address Abandoned:</label><br>
-    <!-- It occurs to me that you can only abandon one address -- yours, so why not pre-populate this and make it uneditable? -->
-    <input type="text" id="isAbandoned" name="isAbandoned" value=""><br><br>
-    <input type="button" id="getIsAbandoned" value="Check">
-  </form>
-
-  <hr />
-
-  <h3>Use this to PERMANENTLY abandon your own address:</h3>
-
-  <form>
-    <div>
-      <span>Your current wallet address:&nbsp;</span>
-      <span id="abandonedAddress">0x0000000000000000000000000000000000000000</span>
-      <span id="abandonedIdenticon">-</span>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <div class="logo-block">
+                <h1 class="logo"><span class="bold-text">ABANDONED</span>ADDRESSES</h1>
+                <h3 class="logo-subtext">Permanently Abandon Your Ethereum Address</h3>
+            </div>
+        </div>
+        <div class="content-container">
+            <div class="form-container">
+                <div class="control-block">
+                    <div class="control-option selected tab-switcher">
+                        <div class="text">My Address</div>
+                    </div><div class="control-option tab-switcher">
+                        <div class="text">Search</div>
+                    </div>
+                </div>
+                <div class="horizontal-tab-wrapper">
+                    <div class="horizontal-tab-container">
+                        <div class="tab-block">
+                            <div class="account-block">
+                                <div id="identicon" class="identicon">
+                                </div>
+                                <h2 id="currentAddressENSName" class="name">&nbsp</h2>
+                                <h3 id="currentAddress" class="address">0x0000000000000000000000000000000000000000</h3>
+                                <h3 class="balance">Current Balance: <span id="currentAddressBalance" class="value">0.0</span>&nbsp;ETH</h3>
+                            </div>
+                            <div class="abandon-block">
+                                <div class="status-wrapper">
+				    <h2 class="status current-address-active">Your address is currently active.</h2><div class="status-icon current-address-active active"></div>
+				    <h2 class="status current-address-abandoned">Your address has been abandoned.</h2><div class="status-icon current-address-abandoned abandoned"></div>
+                                </div>
+                                <div id="abandonAddress" class="standard-button orange-button">Abandon Address</div>
+                                <div class="warning-label"><span class="warning">WARNING:</span> Abandoning your address is permanent and cannot be undone.</div>
+                            </div>
+                        </div><div class="tab-block search-tab-block hidden">
+                            <div class="account-block">
+                                <div id="identiconSearch" class="identicon">
+                                </div>
+                                <h2 id="searchAddressENSName" class="name">&nbsp</h2>
+                                <div class="search-box">
+                                    <input id="addressSearch" class="textbox" type="text" class="address" placeholder="Enter an Ethereum Address" value=""/><div class="textbox-button" id="checkAddress">Check</div>
+                                </div>
+                                <h3 class="balance">Current Balance: <span id="searchAddressBalance" class="value">0.0</span>&nbsp;ETH</h3>
+                            </div>
+                            <div class="abandon-block">
+                                <div class="status-wrapper">
+                                    <h2 class="status search-result-active">This address is currently active.</h2><div class="status-icon search-result-active active"></div>
+                                    <h2 class="status search-result-abandoned">This address has been abandoned.</h2><div class="status-icon search-result-abandoned abandoned"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="github-link">
+                View the project at <a class="standard-link" href="https://github.com/stnbu/abandoned-addresses">GitHub.com</a>
+            </div>
+        </div>
     </div>
-    <input type="button" id="abandonAddress" value="Click Here to Abandon This &#128070 Address!">
-  </form>
 </body>
 <!-- cdn, for now -->
 <script src="https://code.jquery.com/jquery-latest.min.js" type="application/javascript"></script>
