@@ -38,17 +38,12 @@ That is the idea behind this contract. There should be an agreed-upon, standard 
 
 # The Web UI
 
-For the PoC...
+You must have a "web3 capable" browser environment. This most often means installing the [Metamask browser extension](https://metamask.io/). Once installed, with a wallet set up, and with the `Rinkeby` network selected, you should be able to reload the page and immedately get prompted by Metamask to connect.
 
-* Without some kind of fundamental change, it will never be possible to "search" or "glob search" or anything like that on the addresses. So there's no call for any "listing" of addresses. It wouldn't make sense.
-   * Note that we do have _events_, which we might want to read off and list.
-* Super simple: A button that says "Enable Ethereum", "Abandon my Address", and "Check if Address Abandoned"
-   * "Enable Ethereum" connects to a/the wallet/provider.
-   * "Check if Address Abandoned" checks to see if this contract instance considers this particular address as "abandoned".
-   * "Abandon my Address" adds current wallet/provider's address to the list of abandoned address (after address owner confirms and signs for this.)
-   * Note:
-      * `An Ethereum address is a 42 characters hexadecimal address derived from the last 20 bytes of the public key controlling the account with 0x appended in front. e.g., 0x71C7656EC7ab88b098defB751B7401B5f6d8976F`
-      * We can and should show the so-called identicon and (if applicable) reverse-resolved ENS name(s) for the address being abandoned, making these obvious to the user.
+Once connected, you should see your addresses "blockie" identicon and ENS name (if applicable). You can then do a couple of things:
+
+* Switch to the "Search" tab, entiter a valid Ethereum address, with [checksum case](https://coincodex.com/article/2078/ethereum-address-checksum-explained/), and click the "Check" button. The same information above is printed for the given address, included abandoned status.
+* Abandon your _own_ address by going back to the "My Address" tab and clicking "Abandon Address" to add your address to the set of abandoned addresses for this contract (note: you are on the Rinkeby test network, there's no risk of any kind here to existing mainnet wallets). 
 
 # The Contract
 
